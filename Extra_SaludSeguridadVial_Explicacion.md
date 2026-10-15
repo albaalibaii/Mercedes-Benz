@@ -148,9 +148,9 @@ Para cada zona con **30 clientes o más** se calculan los porcentajes de nuestro
 
 | Indicador de zona | Relación con nuestros clientes |
 |---|---|
-| **Mortalidad estandarizada** | Coches **más antiguos** (+0,35), más coches **anteriores a julio de 2024** (+0,35) y más **Recién Llegado de Ocasión** (+0,46); menos 4MATIC (−0,31), SUV y Premium |
-| **% de víctimas graves** | Más **Gran Formato** (+0,61), más clientes **65+** (+0,36) y más 4MATIC (+0,26); menos AMG y Recién Llegado (perfil **rural**) |
-| **Distancia al hospital** | Más **Gran Formato** (+0,43) y **65+** (+0,29); menos Recién Llegado (−0,41) |
+| **Mortalidad estandarizada** | Coches **más antiguos** (+0,35), más coches **anteriores a julio de 2024** (+0,35) y más **Recién Llegado de Ocasión** (+0,45); menos 4MATIC (−0,31), SUV y Premium |
+| **% de víctimas graves** | Más **Gran Formato** (+0,62), más clientes **65+** (+0,36) y más 4MATIC (+0,26); menos AMG y Recién Llegado (perfil **rural**) |
+| **Distancia al hospital** | Más **Gran Formato** (+0,44) y **65+** (+0,29); menos Recién Llegado (−0,35) |
 | **Accidentes por habitante** | Más 4MATIC, SUV, electrificados y Premium (ciudades y zonas alpinas turísticas) |
 
 **Suiza (805 municipios): relaciones débiles** (|ρ| ≤ 0,21). Las zonas suizas se diferencian menos y las tasas por
