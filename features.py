@@ -9,6 +9,7 @@ Uso:
 """
 import numpy as np
 import pandas as pd
+from sklearn.cluster import KMeans
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
@@ -44,14 +45,15 @@ ELECTRIFICADO_POR_NOMBRE = r"^EQ|\d\s?e(?:\s|$)|\sde(?:\s|$)|electric"
 
 # Features que entran en K-Means, agrupadas por el tratamiento que reciben
 CAT_ORDINALES = ["age_range", "finance_leasing_status"]
-NUM_LOG = ["n_vehiculos_historico", "n_vehiculos_actuales", "visitas_taller_por_vehiculo"]
+NUM_LOG = ["n_vehiculos_historico", "n_vehiculos_actuales"]
 NUM = ["meses_cliente", "antiguedad_vehiculo", "gama_max", "pct_electrificado",
-       "pct_furgoneta", "n_canales_consentidos", "tiene_telemetria", "poder_adquisitivo_pct_pais"]
+       "pct_furgoneta", "n_canales_consentidos", "tiene_telemetria", "poder_adquisitivo_pct_pais",
+       "visitas_taller_pct_pais"]
 FEATURES = CAT_ORDINALES + NUM_LOG + NUM
 
 # Topes para que unos pocos clientes extremos (flotas, coches clásicos) no dominen K-Means
 TOPES = {"n_vehiculos_historico": 10, "n_vehiculos_actuales": 5,
-         "visitas_taller_por_vehiculo": 15, "antiguedad_vehiculo": 20, "meses_cliente": 120}
+         "antiguedad_vehiculo": 20, "meses_cliente": 120}
 
 COLS_TELEMETRIA = ["trip_distance_average", "trip_distance_median", "operating_hours_total",
                    "fuel_consumption_average", "speed_average", "speed_median"]
@@ -131,6 +133,9 @@ def agregar_clientes(df):
         "consent_email": cli["consent_epost_communication_channel"],
         "consent_post": cli["consent_post_communication_channel"],
     }).join(veh)
+    # Visitas al taller relativas a su país: AT y CH registran las visitas en garantía de forma muy
+    # distinta (52 % vs 23 % de clientes con 0 visitas con coches de la misma antigüedad)
+    out["visitas_taller_pct_pais"] = out.groupby("country_code")["visitas_taller_por_vehiculo"].rank(pct=True)
     out.index.name = "client_id"
     return out
 
@@ -168,3 +173,12 @@ def construir_pipeline():
         ("recortar", FunctionTransformer(recortar_extremos)),
         ("preprocesar", preprocesar),
     ]).set_output(transform="pandas")
+
+
+# Modelo final elegido en el Reto 3 (reutilizado en el Reto 4 para obtener los mismos clusters)
+K_FINAL = 6
+SEMILLA = 42
+
+
+def ajustar_kmeans(X, k=K_FINAL):
+    return KMeans(n_clusters=k, n_init=10, random_state=SEMILLA).fit(X)
