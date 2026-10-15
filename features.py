@@ -184,3 +184,24 @@ N_INIT_FINAL = 50
 def ajustar_kmeans(X, k=K_FINAL):
     # n_init=50: con 10 inicializaciones K-Means a veces converge a un óptimo local peor (ver Reto 3)
     return KMeans(n_clusters=k, n_init=N_INIT_FINAL, random_state=SEMILLA).fit(X)
+
+
+# Nombres de negocio de los segmentos (Reto 4). Se asignan por el rasgo que define a cada centroide, no por el
+# número de cluster, que es arbitrario
+ORDEN_SEGMENTOS = ["Premium Multivehículo", "Fiel de Taller", "Pionero Eléctrico", "Gran Formato",
+                   "Recién Llegado de Ocasión", "Contacto Solo Digital"]
+COLORES_SEGMENTOS = dict(zip(ORDEN_SEGMENTOS, ["#1f3b57", "#00677F", "#3fa34d", "#c98a1b", "#8c6bb1", "#7f8c8d"]))
+
+
+def nombrar_segmentos(centroides):
+    """Recibe los centroides (DataFrame con las columnas de FEATURES) y devuelve {nº de cluster: nombre}."""
+    cen = centroides
+    nombres = {cen["pct_furgoneta"].idxmax(): "Gran Formato"}
+    nombres[cen["pct_electrificado"].idxmax()] = "Pionero Eléctrico"
+    nombres[cen["n_canales_consentidos"].idxmin()] = "Contacto Solo Digital"
+    nombres[cen["n_vehiculos_historico"].idxmax()] = "Premium Multivehículo"
+    resto = cen.drop(index=list(nombres))
+    nombres[resto["visitas_taller_pct_pais"].idxmax()] = "Fiel de Taller"
+    nombres[resto["visitas_taller_pct_pais"].idxmin()] = "Recién Llegado de Ocasión"
+    assert len(set(nombres.values())) == 6, "la regla de nombres no es única"
+    return nombres
