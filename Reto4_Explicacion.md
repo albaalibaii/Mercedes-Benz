@@ -151,10 +151,10 @@ hombres, con solo un 4 % desconocido).
 
 | Segmento | % | Quién es | Prioridad comercial |
 |---|---|---|---|
-| **Premium Multivehículo** | 12,8 % | Mediana de 3 Mercedes, la mitad con 2 o más a la vez, 58 % leasing, coches de < 2 años, 61 % gama alta, 36 % AMG | Retener y renovar (mayor valor) |
+| **Premium Multivehículo** | 12,9 % | Mediana de 3 Mercedes, la mitad con 2 o más a la vez, 58,5 % leasing, coches de < 2 años, 61 % gama alta, 36 % AMG | Retener y renovar (mayor valor) |
 | **Fiel de Taller** | 26,2 % | Veterano (42 meses), un coche compacto o medio de ~5 años, combustión, **mucho uso del taller oficial**, 74 % Suiza | Planes de mantenimiento y renovación |
 | **Pionero Eléctrico** | 14,3 % | 97 % híbrido enchufable o eléctrico, coches de ~3 años, cliente reciente, más Austria | Gama EQ y servicios eléctricos |
-| **Gran Formato** | 8,7 % | Furgonetas: V-Class/Vito 69 %, Sprinter 20 %; solo 3 % empresas, así que son sobre todo particulares | Renovación de furgoneta, furgonetas eléctricas |
+| **Gran Formato** | 8,8 % | Furgonetas: V-Class/Vito 69 %, Sprinter 20 %; solo 3 % empresas, así que son sobre todo particulares | Renovación de furgoneta, furgonetas eléctricas |
 | **Recién Llegado de Ocasión** | 27,1 % | El más reciente (20 meses), coche de 6 años, no usa el taller oficial, 85 % nunca financió, 18 % inactivo | Primer coche nuevo, atraer al taller, evitar el abandono |
 | **Contacto Solo Digital** | 10,9 % | Perfil medio, pero el 79 % solo acepta email | Recuperar consentimientos; solo canal digital |
 
@@ -199,16 +199,16 @@ inicializaciones y k de 2 a 5:
 
 | k | Silhouette | ARI entre semillas | Tamaños |
 |---|---|---|---|
-| 2 | 0,229 | 1,000 | 23 / 77 % |
-| **3** | **0,162** | **0,999** | **50 / 16 / 34 %** |
-| 4 | 0,167 | 1,000 | 8 / 30 / 12 / 49 % |
-| 5 | 0,117 | 0,999 | 29 / 26 / 8 / 11 / 25 % |
+| 2 | 0,227 | 0,999 | 23 / 77 % |
+| **3** | **0,162** | **1,000** | **16 / 50 / 34 %** |
+| 4 | 0,168 | 1,000 | 12 / 50 / 30 / 8 % |
+| 5 | 0,116 | 0,998 | 25 / 29 / 26 / 8 / 12 % |
 
 - **k = 2** tiene el mejor silhouette, pero junta a los clientes de leasing con los que compran al contado, que necesitan
   ofertas muy distintas.
 - **k = 4** tiene un silhouette casi igual al de k = 3, pero crea un grupo del 8 % (~1.800 clientes), demasiado pequeño
   para una campaña propia.
-- **k = 3** separa tres perfiles útiles, es totalmente estable (ARI 0,999) y su silhouette (0,162) es **más del triple**
+- **k = 3** separa tres perfiles útiles, es totalmente estable (ARI 1,000) y su silhouette (0,162) es **más del triple**
   que el del segmento completo (0,048). **Elegido**, con el mismo criterio de utilidad del Reto 3.
 
 ### Los tres sub-perfiles
@@ -260,7 +260,7 @@ segmento viven, de media, un 18 % más lejos del hospital que el cliente típico
 |---|---|
 | **Gran Formato** | El único que destaca de verdad: **18-20 % más lejos del hospital** en los dos países y, en Austria, **8 % más accidentes graves**. Es el perfil rural o de montaña |
 | **Recién Llegado de Ocasión** | El más **urbano**: más cerca del hospital y menos accidentes graves. En Austria tiene la mortalidad de zona más alta, pero la diferencia es mínima (8,97 frente a 8,91 ‰) |
-| **Pionero Eléctrico** | Algo más lejos del hospital en Austria (104) y algo más de accidentes graves (102): periferias con casa y cargador |
+| **Pionero Eléctrico** | Algo más lejos del hospital en Austria (104) y algo más de accidentes graves (101-102): periferias con casa y cargador |
 | **Premium, Fiel de Taller, Contacto Solo Digital** | Prácticamente en la media |
 
 **Conclusión:** las diferencias entre segmentos son **pequeñas**. Tiene sentido: los segmentos se formaron por **qué
@@ -275,7 +275,7 @@ Las diferencias están **dentro** de cada segmento, no entre segmentos. Dentro d
 - **El segmento dice QUÉ ofrecer** (renovación, mantenimiento, gama EQ...).
 - **La zona dice A QUIÉN de ese segmento** priorizar con un mensaje de seguridad.
 
-Ejemplo: de los 46.950 "Recién Llegado de Ocasión", **~7.500** viven en zona de muchos accidentes graves y tienen un
+Ejemplo: de los 46.920 "Recién Llegado de Ocasión", **~7.500** viven en zona de muchos accidentes graves y tienen un
 coche anterior a julio de 2024. Ese mes entró en vigor el Reglamento General de Seguridad de la UE, que obliga a
 llevar asistentes como la frenada de emergencia, así que esos coches pueden no tenerlos. Para ellos: un seminuevo
 **Mercedes-Benz Certified** o un primer coche nuevo con **Active Brake Assist** de serie, y una **revisión de
@@ -306,10 +306,15 @@ La otra opción era usar los indicadores de zona como **variables del modelo** y
 
 | Prueba | Resultado | Qué significa |
 |---|---|---|
-| Mismo peso que el resto de variables | **ARI 0,977**: salen los mismos 6 segmentos (el 99 % de cada uno cae en su equivalente) | El K-Means **ignora** las variables de zona porque no forman grupos |
+| Mismo peso que el resto de variables | **ARI 0,978**: salen los mismos 6 segmentos (el 99 % de cada uno cae en su equivalente) | El K-Means **ignora** las variables de zona porque no forman grupos |
 | Silhouette | Baja de **0,136 a 0,102** | Solo añaden ruido |
-| Zona con **peso doble** | **ARI 0,01**: segmentos totalmente distintos | La zona "se come" el modelo: clusters de "urbano" o "rural" y desaparecen furgonetas, eléctricos, leasing y taller, lo que era útil para vender. Además, el resultado lo decide quien elige el peso, no los datos |
-| Mismo peso con **k = 8** | **ARI 0,53** | Se mantienen los segmentos claros. Uno de los clusters nuevos separa el leasing. El otro es un grupo **urbano y de menor poder adquisitivo**, sacado a partes iguales de Fiel de Taller y Recién Llegado: separa por **dónde vive** el cliente, no por cómo se relaciona con la marca |
+| Zona con **peso doble** | **ARI 0,02**: segmentos totalmente distintos | La zona "se come" el modelo: clusters de "urbano" o "rural" y desaparecen furgonetas, eléctricos, leasing y taller, lo que era útil para vender. Además, el resultado lo decide quien elige el peso, no los datos |
+| Mismo peso con **k = 8** | **ARI 0,60** | Las variables de zona siguen sin moverse (ningún centroide pasa de ±0,2): los clusters extra salen de dividir segmentos por rasgos del cliente. Ni dándole sitio aparece un grupo geográfico |
+
+**Dato revelador:** con el poder adquisitivo **por hogar** (la versión anterior), k = 8 sí creaba un grupo "urbano y de
+menor poder adquisitivo". Era el **artefacto** que descubrimos en el Reto 1: la variable por hogar mezclaba riqueza con
+tamaño del hogar, que va unido a lo rural. Al corregirla, ese falso segmento desaparece. Es un buen ejemplo de cómo un
+detalle de datos puede inventar un segmento.
 
 ### Decisión
 
@@ -319,7 +324,49 @@ no de la persona. Su sitio es el del apartado 6: una **capa de perfilado** encim
 
 ---
 
-## 8. Resumen de decisiones
+## 8. Lo que no se ve a simple vista: oportunidades ocultas
+
+Las fichas describen cada segmento por lo **evidente**: lo que lo define. Pero en el Reto 1 (apartado 6) encontramos
+relaciones **no evidentes** que no entraron en el modelo. Al cruzarlas con los segmentos aparecen públicos que
+**atraviesan** varios segmentos o que **contradicen** su etiqueta.
+
+### Las señales
+
+| Señal | Qué es | De dónde sale |
+|---|---|---|
+| **PHEV que no se carga** | Híbrido enchufable que consume como un coche de combustión | 1 de cada 7 PHEV (Reto 1) |
+| **Hogar mixto** | 2 o más coches actuales, unos electrificados y otros no | El eléctrico entra como coche principal |
+| **Multi-combustión** | 2 o más coches actuales, ninguno electrificado | Aún sin electrificar |
+| **Riesgo temprano** | Coche de 3 años o menos, sigue activo y **nunca** ha ido al taller oficial | No ir al taller va unido a más abandono |
+| **65+ con coche de 8+ años** | Cliente mayor con coche antiguo (y poco usado) | Coche viejo con pocos km |
+| **Zona de prevención baja** | Austria: distrito con mucha mortalidad **y** sin visitas al taller | Mortalidad ↔ menos mantenimiento |
+| **Perfil incompleto** | Género desconocido | El dato que falta indica relación débil |
+
+### Una comprobación antes de usar el "riesgo temprano"
+
+Los eléctricos necesitan menos mantenimiento: ¿y si un eléctrico sin visitas es simplemente normal? Lo comprobamos con
+los clientes que **ya** están inactivos: entre los de coche reciente, los que no fueron al taller están inactivos
+**entre 3 y 6 veces más**, en combustión, eléctricos y furgonetas por igual. La señal sirve para todos.
+
+### La relectura de cada segmento
+
+| Segmento | Lo evidente | Lo que no se ve |
+|---|---|---|
+| **Premium Multivehículo** | Varios coches, leasing, gama alta | Es el que **menos carga sus híbridos** (casi 1 de cada 5 consume como un combustión): PHEV de leasing o empresa elegidos por fiscalidad o imagen. Y es donde está **el siguiente eléctrico**: ~1.900 hogares mixtos y ~2.500 multi-combustión. La conversación es "**electrifique su garaje**" (wallbox, carga, eléctrico compacto) |
+| **Pionero Eléctrico** | Coches nuevos y electrificados | El de **más riesgo temprano**: ~4.300 (17 %) no han ido al taller con un coche de ≤ 3 años. El eléctrico apenas necesita mantenimiento, así que **la marca pierde el contacto físico**. Necesita otros puntos de contacto: actualizaciones, revisión de batería, eventos de carga |
+| **Recién Llegado de Ocasión** | Reciente, coche antiguo, sin taller | **Concentra lo que no se ve**: más riesgo temprano (~5.200), más mayores con coche viejo (~2.900), más de la mitad de los de zona de prevención baja y el perfil más incompleto (29 % sin género). El objetivo no es venderle un coche: es **completar la relación** (datos, primera visita, revisión de seguridad) |
+| **Fiel de Taller** | Usa mucho el taller | El **reservorio de los mayores**: ~1.600 clientes de 65+ con coche de 8+ años, poco usado y bien cuidado. Público ideal para "**tu coche vale más de lo que crees**" y un cambio a un coche más seguro y cómodo |
+| **Gran Formato** | Furgonetas | Rural, conduce más rápido (carretera) y un 15 % de riesgo temprano: probablemente furgonetas atendidas en **talleres independientes cercanos**. Una red de **servicio móvil** o talleres asociados en zonas rurales lo retendría |
+| **Contacto Solo Digital** | Solo email | Sin señales propias destacables: su reto sigue siendo el canal |
+
+### La idea que atraviesa todo
+
+El taller oficial no es solo posventa: es **el principal termómetro de la relación**. Una alerta "**coche nuevo sin
+primera visita al taller**" en el CRM permitiría actuar **antes** de que el cliente desaparezca, en todos los segmentos.
+
+---
+
+## 9. Resumen de decisiones
 
 | Decisión | Por qué |
 |---|---|
@@ -335,10 +382,12 @@ no de la persona. Su sitio es el del apartado 6: una **capa de perfilado** encim
 | Comparar la zona de cada segmento dentro de cada país | Austria y Suiza tienen niveles muy distintos de accidentes y distancias |
 | Bootstrap por zonas, no test clásico | Los vecinos comparten el dato de zona y no son observaciones independientes |
 | Datos de zona como capa de perfilado, no como variables del K-Means | No cambian los segmentos con su peso natural; forzados, los vuelven geográficos |
+| Cruzar los segmentos con las relaciones no evidentes del Reto 1 | Aparecen públicos que la etiqueta del segmento no cuenta |
+| Validar la señal de riesgo temprano por tipo de vehículo | Descartar que los eléctricos "no vayan al taller" solo porque no lo necesitan |
 
 ---
 
-## 9. Glosario rápido
+## 10. Glosario rápido
 
 | Término | Significado |
 |---|---|

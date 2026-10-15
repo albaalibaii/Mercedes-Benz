@@ -50,9 +50,9 @@ La **varianza explicada** es el porcentaje de la información total (variación 
 |---|---|---|---|
 | PC1 | 18,1 % | 18,1 % | 2,17 |
 | PC2 | 12,4 % | **30,5 %** | 1,49 |
-| PC3 | 10,6 % | 41,1 % | 1,27 |
-| PC4 | 9,7 % | 50,8 % | 1,16 |
-| PC5 | 8,9 % | 59,7 % | 1,07 |
+| PC3 | 10,6 % | 41,1 % | 1,28 |
+| PC4 | 9,7 % | 50,9 % | 1,17 |
+| PC5 | 8,9 % | 59,7 % | 1,06 |
 | PC6 | 8,3 % | 68,0 % | 0,99 |
 | PC7 | 7,7 % | 75,6 % | 0,92 |
 | PC8 | 6,7 % | **82,3 %** | 0,80 |
@@ -179,7 +179,7 @@ primeros *d* componentes:
 
 | Componentes usados | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 12 |
 |---|---|---|---|---|---|---|---|---|
-| Silhouette | **0,070** | 0,118 | 0,117 | 0,158 | **0,186** | 0,156 | 0,142 | 0,135 |
+| Silhouette | **0,070** | 0,114 | 0,115 | 0,160 | **0,187** | 0,156 | 0,142 | 0,135 |
 
 - En **2D** el silhouette es la **mitad** que con todas las features: en el plano PC1-PC2 los clusters parecen
   **mucho más solapados de lo que están**.

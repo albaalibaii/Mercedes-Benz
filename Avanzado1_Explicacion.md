@@ -115,13 +115,13 @@ varios valores:
 | `reg_covar` | Silhouette | Parecido con K-Means (ARI) | Cluster más grande |
 |---|---|---|---|
 | 0,000001 (estándar) | 0,114 | 0,36 | 46 % |
-| 0,05 | 0,150 | 0,42 | 45 % |
+| 0,05 | 0,110 | 0,36 | 46 % |
 | 0,1 | 0,123 | 0,32 | 35 % |
-| 0,3 | 0,166 | 0,42 | 52 % |
+| 0,3 | 0,139 | 0,48 | 38 % |
 
 **Conclusión:** el resultado **cambia mucho** según un parámetro que no tiene un valor "correcto". Si eligiésemos el que
 da mejor silhouette (0,3), estaríamos **ajustando el modelo a la métrica**. Además, GMM **cambia con la semilla**: de tres
-ejecuciones, una solo se parece un 59 % a las otras. Y siempre aparece un grupo gigante (35-52 %). **GMM no es robusto
+ejecuciones, ninguna coincide con otra (parecido de solo 0,47-0,72). Y siempre aparece un grupo gigante (35-46 %). **GMM no es robusto
 con estos datos.**
 
 ---
@@ -143,12 +143,12 @@ comparable con K-Means.
 
 | Enlace | Silhouette | Cluster más grande |
 |---|---|---|
-| Average | **0,205** (el mejor de todo el reto) | **97 %** |
-| Ward | 0,147 | 38 % |
-| Complete | 0,013 | 55 % |
+| Average | **0,155** (el mejor de todo el reto) | **95 %** |
+| Ward | 0,150 | 40 % |
+| Complete | 0,015 | 68 % |
 
-El enlace *average* tiene el mejor silhouette de todos, pero mete al **97 % de los clientes en un solo grupo** y reparte el
-3 % restante en grupos de unos pocos clientes. El silhouette sale alto porque esos clientes raros están muy lejos de todo,
+El enlace *average* tiene el mejor silhouette de todos, pero mete al **95 % de los clientes en un solo grupo** y reparte el
+5 % restante en grupos de unos pocos clientes. El silhouette sale alto porque esos clientes raros están muy lejos de todo,
 así que "su" grupo está muy bien separado. **Como segmentación no sirve para nada.**
 
 > Esta es la razón por la que **nunca hay que elegir un modelo solo por una métrica**. Siempre hay que mirar qué grupos
@@ -158,9 +158,9 @@ Solo **Ward** da grupos equilibrados, así que es el que comparamos con K-Means.
 
 ### Ward depende de la muestra
 
-Repetimos Ward con **otras dos muestras** de 20.000 clientes. El parecido entre resultados fue solo de **0,54-0,64**
-(ARI). Es decir, según qué clientes caigan en la muestra, los grupos cambian bastante. K-Means usa a todos los clientes y
-es estable (0,995).
+Repetimos Ward con **otras dos muestras** de 20.000 clientes. El parecido entre resultados fue de **0,51-0,82** (ARI).
+Es decir, según qué clientes caigan en la muestra, los grupos pueden cambiar bastante. K-Means usa a todos los clientes y
+es estable (0,997).
 
 ---
 
@@ -177,7 +177,7 @@ Probamos varios valores:
 | 0,5 | 0 | 100 % | — |
 | 1,0 | 21 | 66 % | 12 % |
 | 1,3 | 14 | 43 % | 36 % |
-| 1,6 | 10 | 22 % | 65 % |
+| 1,6 | 12 | 21 % | 65 % |
 | 2,0 | 4 | 7 % | 84 % |
 
 - Con `eps` pequeño, **la mayoría de los clientes es "ruido"**.
@@ -194,18 +194,18 @@ adecuado** y fuera de la tabla comparativa.
 
 | Algoritmo | Silhouette | Calinski-Harabasz | Davies-Bouldin | Cluster más grande | Estabilidad |
 |---|---|---|---|---|---|
-| **K-Means** | 0,136 | **2.206** | 1,89 | **27 %** | **0,995** entre semillas |
-| GMM (estándar) | 0,114 | 1.728 | 2,62 | 46 % | Sensible a la semilla (0,59) |
-| GMM (regularizado) | 0,166 | 1.925 | **1,84** | 52 % | Sensible a `reg_covar` |
-| Aglomerativo (Ward) | 0,147 | 1.816 | 1,99 | 39 % | 0,54-0,64 entre muestras |
+| **K-Means** | 0,136 | **2.205** | **1,89** | **27 %** | **0,997** entre semillas |
+| GMM (estándar) | 0,114 | 1.727 | 2,62 | 46 % | Sensible a la semilla (0,47-0,72) |
+| GMM (regularizado) | 0,139 | 1.953 | 2,01 | 38 % | Sensible a `reg_covar` |
+| Aglomerativo (Ward) | 0,150 | 1.901 | 1,95 | 40 % | 0,51-0,82 entre muestras |
 
 ### Cómo leerlos
 
-- **K-Means** gana en Calinski-Harabasz y en equilibrio, y es con diferencia el más estable.
-- GMM regularizado y Ward tienen un silhouette **algo mayor**, pero **siempre** a costa de crear un **grupo enorme**
-  (39-52 %). Es el mismo fenómeno que vimos con k = 4 en el Reto 3: juntar a "los del medio" sube el silhouette porque deja
+- **K-Means** gana en Calinski-Harabasz, en Davies-Bouldin y en equilibrio, y es con diferencia el más estable.
+- GMM regularizado y Ward tienen un silhouette **algo mayor** (+0,003 y +0,014), pero **siempre** a costa de crear un
+  **grupo enorme** (38-40 %). Es el mismo fenómeno que vimos con k = 4 en el Reto 3: juntar a "los del medio" sube el silhouette porque deja
   muy aislados a los grupos de los extremos.
-- Todas las diferencias de silhouette son **pequeñas** (entre 0,11 y 0,17): ningún algoritmo descubre una estructura que
+- Todas las diferencias de silhouette son **pequeñas** (entre 0,11 y 0,15): ningún algoritmo descubre una estructura que
   K-Means no viera.
 
 ---
@@ -215,7 +215,7 @@ adecuado** y fuera de la tabla comparativa.
 ### El parecido global (ARI)
 
 El **ARI** (Adjusted Rand Index) mide cuánto se parecen dos agrupaciones: 1 = idénticas, 0 = como dos repartos al azar.
-Entre K-Means y los demás sale **0,3-0,45**: parecido **moderado**. Pero el ARI global no dice **qué** segmentos coinciden.
+Entre K-Means y los demás sale **0,36-0,48**: parecido **moderado**. Pero el ARI global no dice **qué** segmentos coinciden.
 
 ### Segmento a segmento
 
@@ -230,11 +230,11 @@ parte de cada segmento acaba en el **grupo más grande** del otro algoritmo:
 | Segmento de K-Means | Se mantiene unido | % que acaba en el grupo gigante de otros algoritmos |
 |---|---|---|
 | Gran Formato | ~97 % | ~0 % |
-| Pionero Eléctrico | ~86 % | 0-6 % |
-| Contacto Solo Digital | 80-88 % (salvo GMM estándar: 11 %) | 1-51 % |
-| Premium Multivehículo | ~58 % | 0-37 % |
-| **Fiel de Taller** | — | **62-92 %** |
-| **Recién Llegado de Ocasión** | — | **67-82 %** |
+| Pionero Eléctrico | ~90 % | 0-1 % |
+| Contacto Solo Digital | 70-89 % (salvo GMM estándar: 11 %) | 2-51 % |
+| Premium Multivehículo | ~60 % (27-82 %) | 0-4 % |
+| **Fiel de Taller** | — | **51-78 %** |
+| **Recién Llegado de Ocasión** | — | **74-86 %** |
 
 ### Conclusiones
 
@@ -256,7 +256,7 @@ marketing, los clientes cercanos a esa frontera pueden recibir mensajes de ambos
 
 1. **Ningún algoritmo encuentra una estructura claramente mejor.** Las pequeñas mejoras de silhouette siempre vienen de
    crear un grupo gigante, menos útil para marketing.
-2. **Es el más estable**: mismos segmentos con cualquier semilla (0,995), frente a GMM (sensible a parámetros y semilla)
+2. **Es el más estable**: mismos segmentos con cualquier semilla (0,997), frente a GMM (sensible a parámetros y semilla)
    y Ward (sensible a la muestra).
 3. **Usa toda la base**, sin muestreo.
 4. **Es el más equilibrado**: ningún segmento supera el 27 %.

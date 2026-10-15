@@ -21,7 +21,7 @@ Por eso este reto es donde más se decide **qué tipo de segmentos saldrán**.
 
 ---
 
-## 1. El punto de partida: tres decisiones que vienen del Reto 1
+## 1. El punto de partida: cinco decisiones que vienen del Reto 1
 
 1. **Una fila por cliente.** El fichero tiene una fila por relación cliente–vehículo. Agregamos para que cada cliente
    cuente una sola vez y acabe en un único segmento.
@@ -32,6 +32,10 @@ Por eso este reto es donde más se decide **qué tipo de segmentos saldrán**.
    - el poder adquisitivo y las visitas al taller se miden **comparando a cada cliente con los de su país**.
 3. **La telemetría no entra.** Falta por motivos estructurales (eléctricos, no propietarios, coches antiguos). Usarla
    como "cliente conectado" mezclaría esas tres cosas y penalizaría a los dueños de eléctricos. Solo se usa para describir.
+4. **Poder adquisitivo por habitante, no por hogar.** El de por hogar sube en las zonas rurales solo porque los hogares
+   son más grandes (Reto 1, apartado 6.2).
+5. **Los datos externos de salud y seguridad vial se añaden, pero no segmentan.** Se unen a cada cliente para
+   describirlo (apartado 4 bis).
 
 ---
 
@@ -49,7 +53,7 @@ Por eso este reto es donde más se decide **qué tipo de segmentos saldrán**.
 | `pct_electrificado` | % de sus coches híbridos enchufables o eléctricos | **Sí** | Afinidad con la electrificación (campañas EQ) |
 | `pct_furgoneta` | % de sus coches que son furgonetas | **Sí** | Uso profesional o familiar grande |
 | `n_canales_consentidos` | Por cuántos canales acepta comunicaciones (0 a 3) | **Sí** | Si se le puede contactar |
-| `poder_adquisitivo_pct_pais` | Riqueza de su zona **comparada con su país** | **Sí** | Capacidad de compra sin que el país domine |
+| `poder_adquisitivo_pct_pais` | Riqueza **por habitante** de su zona, **comparada con su país** | **Sí** | Capacidad de compra sin que el país domine ni el tamaño del hogar la infle |
 | `visitas_taller_pct_pais` | Visitas al taller en garantía **comparadas con su país** | **Sí** | Uso del taller: base para planes de mantenimiento |
 
 Una **feature derivada** es una variable que **no está en el fichero** y la creamos a partir de otras. El reto pedía al
@@ -95,10 +99,10 @@ encima del 80 % de su grupo".
 
 **Ejemplo con el poder adquisitivo:**
 
-- Un austriaco con 90.000 € y un suizo con 90.000 € tienen el mismo valor en euros.
+- Un austriaco y un suizo que viven en zonas con 45.000 € por habitante tienen el mismo valor en euros.
 - Pero el austriaco vive en una de las zonas **más ricas de Austria**: está por encima de prácticamente todos los
-  austriacos (percentil ≈ 1). El suizo vive en una zona **por debajo de lo normal en Suiza**: solo supera al 8 % de los
-  suizos (percentil ≈ 0,08).
+  austriacos (percentil ≈ 1). El suizo vive en una zona **por debajo de lo normal en Suiza**: solo supera al 19 % de los
+  suizos (percentil ≈ 0,19).
 
 Para una campaña local, lo relevante es la posición **dentro de su mercado**. Además, al usar percentiles por país, la
 variable ya no distingue países: en ambos va de 0 a 1 con la misma distribución.
@@ -124,6 +128,8 @@ esa diferencia desaparece.
 |---|---|
 | País | Los segmentos separarían países |
 | Poder adquisitivo en euros, población, hogares | En euros depende del país. Población y hogares miden el tamaño de la zona, no al cliente |
+| Poder adquisitivo **por hogar** | Mide en parte el tamaño del hogar: sube en el campo porque los hogares son más grandes, no más ricos |
+| Datos de zona (accidentes, % graves, mortalidad, distancia al hospital) | Describen la zona, no al cliente (ver 4 bis) |
 | Género | Es **inferido** (no lo declaró el cliente), falta en el 17 %, y segmentar por género inferido es poco fiable y delicado |
 | B2B (empresa) | Solo el 1,8 % de las relaciones: crearía un segmento minúsculo. Las flotas ya se ven con el nº de vehículos |
 | Telemetría | Nulo estructural (ver Reto 1) |
@@ -133,6 +139,22 @@ esa diferencia desaparece.
 
 Que no entren en el modelo **no significa que se tiren**: en el Reto 4 se usan para **describir** cada segmento (por
 ejemplo, "este segmento tiene un 70 % de suizos" o "conduce trayectos largos").
+
+### 4 bis. Los datos externos de zona: se añaden, pero no segmentan
+
+El primer paso del pipeline une a cada cliente, por **país + código postal**, cuatro datos oficiales de **la zona donde
+vive** (construidos en el notebook Extra): accidentes por 1.000 habitantes, % de accidentes graves, mortalidad
+estandarizada (solo Austria) y distancia al hospital. También su percentil dentro del país.
+
+**¿Por qué no entran en el K-Means?**
+1. **Describen a los vecinos, no al cliente.** Todos los clientes de un distrito austriaco (~80.000 habitantes) tienen
+   el mismo valor. Segmentar con él sería suponer que cada persona es como la media de su zona (**falacia ecológica**).
+2. **No existen igual en los dos países.** La mortalidad solo está en Austria: rellenarla en Suiza crearía una variable
+   que en realidad separa países.
+3. **Lo probamos.** En el Reto 4 repetimos el K-Means con ellos: salen los mismos segmentos y el silhouette empeora; si
+   se les da más peso, los segmentos pasan a ser "urbano" y "rural".
+
+Se usan para **entender** los datos (Reto 1) y **describir** los segmentos (Reto 4).
 
 ---
 

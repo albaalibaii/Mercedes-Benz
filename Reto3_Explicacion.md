@@ -51,15 +51,15 @@ Entrenamos K-Means para **k = 2, 3, … 10** y medimos dos cosas en cada caso: l
 
 | k | Inercia | Caída de inercia | Silhouette | Cluster más pequeño | % de suizos (mín.–máx. por cluster) |
 |---|---|---|---|---|---|
-| 2 | 1.853.753 | — | 0,126 | 35,0 % | 62–73 % |
-| 3 | 1.701.161 | 8,2 % | 0,140 | 9,4 % | 60–70 % |
-| 4 | 1.537.389 | 9,6 % | **0,170** | 8,9 % | 55–70 % |
-| 5 | 1.424.416 | 7,3 % | 0,132 | 8,8 % | 55–74 % |
-| **6** | **1.340.947** | **5,9 %** | **0,135** | **8,7 %** | **55–74 %** |
-| 7 | 1.267.050 | 5,5 % | 0,137 | 7,8 % | 55–**86 %** |
-| 8 | 1.210.751 | 4,4 % | 0,138 | 7,2 % | 55–**86 %** |
-| 9 | 1.179.561 | 2,6 % | 0,122 | 6,5 % | 55–**85 %** |
-| 10 | 1.141.229 | 3,3 % | 0,122 | 3,5 % | 55–**86 %** |
+| 2 | 1.853.780 | — | 0,126 | 34,9 % | 62–73 % |
+| 3 | 1.689.401 | 8,9 % | 0,145 | 16,5 % | 55–69 % |
+| 4 | 1.537.641 | 9,0 % | **0,170** | 8,9 % | 55–70 % |
+| 5 | 1.424.611 | 7,4 % | 0,132 | 8,8 % | 54–73 % |
+| **6** | **1.341.133** | **5,9 %** | **0,135** | **8,8 %** | **55–74 %** |
+| 7 | 1.267.223 | 5,5 % | 0,137 | 7,7 % | 55–**86 %** |
+| 8 | 1.210.867 | 4,4 % | 0,138 | 7,1 % | 55–**86 %** |
+| 9 | 1.177.968 | 2,7 % | 0,126 | 5,1 % | 55–**85 %** |
+| 10 | 1.141.215 | 3,1 % | 0,122 | 3,6 % | 55–**86 %** |
 
 ### ¿Qué es la inercia? El método del codo
 
@@ -71,7 +71,8 @@ de nada. Por eso no buscamos el mínimo, sino el **codo**: el punto a partir del
 En el gráfico es donde la curva pasa de bajar rápido a bajar despacio, como el codo de un brazo.
 
 **Nuestro caso:** no hay un codo muy nítido (es habitual con datos reales). La mayor mejora llega al pasar a k = 4
-(−9,6 %). Después las mejoras se van reduciendo (7,3 % → 5,9 % → 5,5 % → 4,4 %), y a partir de k = 9 son marginales.
+(−9,0 %, casi igual que a k = 3). Después las mejoras se van reduciendo (7,4 % → 5,9 % → 5,5 % → 4,4 %), y a partir
+de k = 9 son marginales.
 El codo está en la zona **k = 4-6**.
 
 ### ¿Qué es el Silhouette?
@@ -190,21 +191,20 @@ que se le ponga a cada cluster (el "cluster 2" de una ejecución puede ser el "c
 
 ### Lo que encontramos
 
-**Con 10 inicializaciones** (`n_init=10`, el valor habitual), el ARI medio fue **0,764**. Aparecían **dos soluciones
-distintas** según la semilla:
+**Con 10 inicializaciones** (`n_init=10`, el valor habitual), el ARI medio es **0,996**: las 5 semillas llegan
+prácticamente a la misma solución.
 
-| Semilla | Inercia | Solución |
-|---|---|---|
-| 42, 1, 2 | ≈ 1.340.943 | A (con segmento "pocos consentimientos") |
-| 0, 3 | ≈ 1.343.087 | B (cambia ese segmento por uno de "leasing") |
-
-La solución **A es mejor** (menor inercia), pero con 10 intentos el algoritmo a veces se quedaba en la B.
+**Pero no siempre fue así.** En la versión anterior del pipeline, que usaba el poder adquisitivo **por hogar** (en el
+Reto 1 vimos que estaba sesgado), el ARI con 10 inicializaciones era **0,764**: aparecían **dos soluciones distintas**
+según la semilla. Una tenía el segmento de "pocos consentimientos" y la otra lo cambiaba por uno de "leasing".
 
 **Por qué es grave:** otro miembro del equipo, ejecutando el mismo código con otra semilla, podría obtener **segmentos
-diferentes** y conclusiones distintas.
+diferentes** y conclusiones distintas. Y la lección es que **la estabilidad depende de los datos**: un pequeño cambio en
+una variable puede hacer aparecer o desaparecer el problema.
 
-**Solución:** subir a **50 inicializaciones** (`n_init=50`). El algoritmo prueba 50 puntos de partida y se queda con el
-de menor inercia. Con 50, las 5 semillas llegan a la misma solución A: **ARI medio de 0,995**.
+**Decisión:** usar **50 inicializaciones** (`n_init=50`). El algoritmo prueba 50 puntos de partida y se queda con el
+de menor inercia. Con 50, las 5 semillas llegan a la misma solución: **ARI medio de 0,997**. Cuesta unos segundos y
+nos protege si los datos cambian.
 
 El modelo final se entrena así en `features.py` (`ajustar_kmeans`), de modo que el Reto 4 y cualquiera del equipo
 obtienen **exactamente** los mismos segmentos.
@@ -215,12 +215,12 @@ obtienen **exactamente** los mismos segmentos.
 
 | Cluster | Clientes | % | Qué lo distingue (provisional) | Silhouette | % clientes en la frontera |
 |---|---|---|---|---|---|
-| 0 | 18.824 | 10,9 % | Pocos consentimientos de contacto | 0,085 | 10 % |
-| 1 | 45.492 | 26,2 % | Fieles al taller y con años de relación | 0,162 | 0 % |
-| 2 | 46.950 | 27,1 % | Recientes, pocas visitas al taller, coche más antiguo | 0,123 | 6 % |
-| 3 | 24.778 | 14,3 % | Electrificados | 0,171 | 1 % |
-| 4 | 15.173 | 8,7 % | Furgonetas | 0,229 | 1 % |
-| 5 | 22.239 | 12,8 % | Multi-vehículo, leasing, gama alta, coches nuevos | 0,048 | **40 %** |
+| 0 | 18.846 | 10,9 % | Pocos consentimientos de contacto | 0,084 | 10 % |
+| 1 | 45.449 | 26,2 % | Fieles al taller y con años de relación | 0,163 | 0 % |
+| 2 | 46.920 | 27,1 % | Recientes, pocas visitas al taller, coche más antiguo | 0,122 | 6 % |
+| 3 | 24.754 | 14,3 % | Electrificados | 0,171 | 1 % |
+| 4 | 15.183 | 8,8 % | Furgonetas | 0,227 | 1 % |
+| 5 | 22.304 | 12,9 % | Multi-vehículo, leasing, gama alta, coches nuevos | 0,048 | **40 %** |
 
 ("% en la frontera" = clientes con Silhouette negativo, que encajarían casi igual en otro cluster.)
 
@@ -256,7 +256,7 @@ Los nombres de negocio de cada segmento se ponen en el Reto 4.
 | Silhouette con muestras de 20.000 × 3 | El cálculo completo es inviable; la variación entre muestras es mínima |
 | k = 6 en vez de k = 4 | k = 4 deja al 57 % en un bloque genérico; k = 6 está en la meseta de Silhouette y es accionable |
 | No pasar de k = 6 | Desde 7 aparece un cluster dominado por un país y el Silhouette no mejora |
-| `n_init=50` y semilla 42 | Con 10 inicializaciones había dos soluciones; con 50, siempre la mejor |
+| `n_init=50` y semilla 42 | Con el poder adquisitivo por hogar, 10 inicializaciones daban dos soluciones; con 50, siempre la mejor (protección aunque hoy 10 ya basten) |
 
 ---
 

@@ -4,6 +4,11 @@
 > externos se han usado, cómo se han unido a nuestro CSV, qué correlaciones aparecen y qué acciones proponemos para
 > Mercedes-Benz.
 
+> **Cómo se integra en el resto del proyecto:** la tabla que genera este notebook (`datos_externos_por_cp.csv`) la lee
+> `features.py`, que une los indicadores a cada cliente desde el **Reto 1**. Allí se usan para buscar relaciones no
+> evidentes (y destaparon que el poder adquisitivo por hogar estaba sesgado); en el **Reto 2** se explica por qué no
+> entran en el modelo, y en el **Reto 4** se usan para perfilar los segmentos.
+
 ---
 
 ## 0. La idea

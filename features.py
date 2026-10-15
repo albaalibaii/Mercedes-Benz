@@ -58,6 +58,11 @@ TOPES = {"n_vehiculos_historico": 10, "n_vehiculos_actuales": 5,
 COLS_TELEMETRIA = ["trip_distance_average", "trip_distance_median", "operating_hours_total",
                    "fuel_consumption_average", "speed_average", "speed_median"]
 
+# Indicadores oficiales de salud y seguridad vial por código postal (construidos en Extra_SaludSeguridadVial).
+# Solo perfilado: son datos de la zona, no del cliente, y no entran en el modelo (ver Reto 2)
+RUTA_ZONA = "datos_externos_por_cp.csv"
+COLS_ZONA = ["tasa_accidentes", "pct_graves", "mortalidad_std", "dist_hospital_km"]
+
 
 def cargar_datos(ruta=RUTA_DATOS):
     return pd.read_csv(ruta, low_memory=False)
@@ -122,13 +127,17 @@ def agregar_clientes(df):
         "n_canales_consentidos": cli[["consent_phone_communication_channel",
                                       "consent_epost_communication_channel",
                                       "consent_post_communication_channel"]].sum(axis=1),
-        # Poder adquisitivo relativo a su país (percentil 0-1); nulo → mediana del país (0.5)
-        "poder_adquisitivo_pct_pais": cli.groupby("country_code")["purchasing_power_per_household_eur"]
+        # Poder adquisitivo POR HABITANTE relativo a su país (percentil 0-1); nulo → mediana del país (0.5).
+        # No se usa el de por hogar: en zonas rurales los hogares son más grandes y lo inflan (Reto 1)
+        "poder_adquisitivo_pct_pais": cli.groupby("country_code")["purchasing_power_per_inhabitant_eur"]
                                          .rank(pct=True).fillna(0.5),
         # Solo perfilado
         "country_code": cli["country_code"],
         "gender_derived": cli["gender_derived"].fillna("unknown"),
+        "poder_adquisitivo_hab_eur": cli["purchasing_power_per_inhabitant_eur"],
         "poder_adquisitivo_hogar_eur": cli["purchasing_power_per_household_eur"],
+        "zipcode": cli["zipcode"].astype("string"),
+        "personas_por_hogar": cli["population"] / cli["number_of_households"],
         "consent_phone": cli["consent_phone_communication_channel"],
         "consent_email": cli["consent_epost_communication_channel"],
         "consent_post": cli["consent_post_communication_channel"],
@@ -137,7 +146,26 @@ def agregar_clientes(df):
     # distinta (52 % vs 23 % de clientes con 0 visitas con coches de la misma antigüedad)
     out["visitas_taller_pct_pais"] = out.groupby("country_code")["visitas_taller_por_vehiculo"].rank(pct=True)
     out.index.name = "client_id"
-    return out
+    return anadir_datos_zona(out)
+
+
+def anadir_datos_zona(clientes, ruta=RUTA_ZONA):
+    """Añade los indicadores de salud y seguridad vial de la zona del cliente (por país + código postal).
+
+    También su percentil entre los clientes de su país (`<indicador>_pct_pais`). Si la tabla no existe todavía
+    (se genera en el notebook Extra), las columnas quedan vacías.
+    """
+    try:
+        zona = pd.read_csv(ruta, dtype={"zipcode": "string", "zona": "string"})[["country_code", "zipcode", "zona", *COLS_ZONA]]
+    except FileNotFoundError:
+        zona = pd.DataFrame(columns=["country_code", "zipcode", "zona", *COLS_ZONA])
+    unido = clientes.reset_index().merge(zona, on=["country_code", "zipcode"], how="left", validate="many_to_one")
+    unido = unido.set_index("client_id")
+    assert len(unido) == len(clientes)   # la unión no puede duplicar ni perder clientes
+    for c in COLS_ZONA:
+        unido[c] = pd.to_numeric(unido[c])
+        unido[f"{c}_pct_pais"] = unido.groupby("country_code")[c].rank(pct=True)
+    return unido.loc[clientes.index]
 
 
 def recortar_extremos(clientes):

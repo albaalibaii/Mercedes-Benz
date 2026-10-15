@@ -199,15 +199,17 @@ Este es el ejemplo que mejor muestra por qué no da igual elegir una opción u o
 
 | | Media | Mediana | Mínimo | Máximo | Asimetría |
 |---|---|---|---|---|---|
-| Austria | 66.639 € | 66.938 € | 45.087 € | 113.527 € | 0,21 |
-| Suiza | 125.616 € | 116.082 € | 57.362 € | 342.498 € | 2,32 |
-| Global | 106.347 € | 103.738 € | — | — | 1,67 |
+| Austria | 30.347 € | 30.178 € | 19.702 € | 48.330 € | 0,57 |
+| Suiza | 55.363 € | 51.434 € | 26.660 € | 148.354 € | 2,54 |
+| Global | 47.189 € | 46.753 € | — | — | 1,68 |
 
-- **Media global (106.347 €)**: un cliente austriaco sin dato recibiría 106.347 €, **por encima del 88 % de los
-  austriacos**. Lo convertiríamos en "rico" sin ninguna razón. **Descartada.**
-- **Mediana global (103.738 €)**: el mismo problema. **Descartada.**
-- **Media por país**: en Suiza la distribución es muy **asimétrica** (asimetría 2,32). Unas pocas zonas muy ricas
-  (hasta 342.498 €) tiran de la media hacia arriba: 125.616 € frente a una mediana de 116.082 €. La media no representa
+(Poder adquisitivo **por habitante**; en el apartado 6.2 se explica por qué no usamos el de por hogar.)
+
+- **Media global (47.189 €)**: un cliente austriaco sin dato recibiría 47.189 €, casi el máximo de Austria y **por
+  encima del 88 % de los austriacos**. Lo convertiríamos en "rico" sin ninguna razón. **Descartada.**
+- **Mediana global (46.753 €)**: el mismo problema. **Descartada.**
+- **Media por país**: en Suiza la distribución es muy **asimétrica** (asimetría 2,54). Unas pocas zonas muy ricas
+  (hasta 148.354 €) tiran de la media hacia arriba: 55.363 € frente a una mediana de 51.434 €. La media no representa
   al cliente típico. **Descartada.**
 - **Mediana de su país**: un austriaco sin dato recibe el valor típico austriaco, y un suizo el suizo. **Elegida.**
 
@@ -312,7 +314,8 @@ Austria y Suiza son mercados distintos, y el país podía "colarse" en los segme
 Las cinco variables socioeconómicas forman dos parejas que dicen casi lo mismo: poder adquisitivo **por habitante** ≈
 **por hogar**, y **población** ≈ **nº de hogares** ≈ **poder adquisitivo total**. Estas últimas miden el tamaño de la
 zona, no la riqueza del cliente. Usar varias sería contar lo mismo dos veces, así que nos quedamos con **una**: el poder
-adquisitivo por hogar.
+adquisitivo **por habitante**. Parece igual que el de por hogar (correlación 0,96), pero el apartado 6.2 muestra que el
+de por hogar está inflado en las zonas rurales.
 
 > **¿Qué es la correlación?** Un número entre −1 y 1 que indica si dos variables se mueven juntas. Cerca de 1: cuando
 > una sube, la otra también. Cerca de 0: no tienen relación. Usamos la de **Spearman**, que funciona bien aunque haya
@@ -320,7 +323,86 @@ adquisitivo por hogar.
 
 ---
 
-## 6. Resumen de decisiones
+## 6. Relaciones no evidentes
+
+Lo descriptivo (apartado 5) confirma lo que cualquiera esperaría. Aquí buscamos relaciones **que no son obvias** y que
+cambian cómo interpretamos los datos o qué se le ofrece al cliente.
+
+> **Regla para no engañarnos:** cada hallazgo se enfrenta a su **explicación aburrida** (la edad del coche, el país,
+> si la zona es rural, el poder adquisitivo). Si al tenerla en cuenta el efecto desaparece, no era un hallazgo.
+
+### 6.1 Dentro del propio CSV
+
+| Hallazgo | Cómo lo comprobamos | Qué significa para Mercedes-Benz |
+|---|---|---|
+| **El cliente de 65+ tiene el doble de coches de 10+ años (7,7 % frente a ~4 %), pero los usa mucho menos** | Horas de motor (telemetría) comparando **coches de la misma edad**: ~20 % menos | Su coche viejo tiene **pocos km**: buen valor de recompra ("tu coche vale más de lo que crees") y cambio a un coche **más seguro**, no más caro |
+| **1 de cada 7 híbridos enchufables (PHEV) consume como un coche de combustión** | Consumo medio del PHEV frente a la mediana de los de combustión (8,8 L/100 km); mediana PHEV 5,8 L, lejos de los 1-2 L oficiales | Se cargan poco o nada: público para **wallbox y carga**, y el mejor candidato a pasar a **100 % eléctrico** |
+| **En casas con varios coches, el electrificado es el más nuevo y de más gama** | Clientes con 2+ coches actuales: el eléctrico tiene ~1,5 años frente a ~3,5 del de combustión | El eléctrico **sustituye al coche principal**, no es el "segundo coche barato". El siguiente paso es electrificar el **otro** coche |
+| **Quien no va al taller oficial se va más** | Con coches **de la misma edad** y por país: los clientes con 0 visitas están inactivos entre 1,2 y 4,5 veces más | El taller es una **alarma temprana de abandono**. No prueba causa, pero sirve para priorizar |
+| **Los consentimientos NO predicen el abandono** | ~10 % de inactivos tenga 1, 2 o 3 canales | Que no quiera llamadas no significa que se vaya |
+| **Los AMG no se conducen más rápido** | Misma velocidad media y trayectos que el resto | El AMG se vende como **imagen y experiencia**, no como prestaciones |
+| **El género "desconocido" es un perfil incompleto** | Clientes con la mitad de antigüedad (17 meses frente a 36) y más inactivos | El dato que falta indica una relación **reciente o débil** |
+| **La riqueza de la zona apenas cambia la gama** | Del 20 % más pobre al 20 % más rico, la gama y el % con AMG casi no cambian; sí sube la electrificación | Mercedes no se reparte por renta de la zona |
+| **Con leasing se va más al taller** | Comparando coches de la misma edad | El contrato incluye mantenimiento: el cliente **al contado** es el que hay que atraer al taller |
+
+**Un detalle técnico que podía engañar:** las horas de motor son un **contador acumulado**: cuanto más viejo el coche,
+más horas. Por eso solo se comparan coches de la misma antigüedad.
+
+### 6.2 Con datos oficiales de salud y seguridad vial
+
+En el notebook **Extra_SaludSeguridadVial** descargamos datos oficiales de Austria y Suiza (accidentes, % de accidentes
+graves, mortalidad y distancia al hospital) y los resumimos por código postal. Cada cliente recibe los datos **de la
+zona donde vive**.
+
+**Calidad de la unión.** Los clientes sin dato de zona son sobre todo los que no tienen código postal. Además, ~900
+clientes tienen un código postal con formato correcto **que no existe** (`0000`, `9999`, `1234`, `1000` genérico):
+se quedan sin dato, en lugar de asignarles uno equivocado.
+
+#### Un problema que solo se ve al cruzar: el poder adquisitivo "por hogar"
+
+Al cruzar con la distancia al hospital (que indica si la zona es **rural**), en Austria las zonas rurales salían más
+"ricas". La explicación:
+
+| | Relación con la distancia al hospital | Relación con las personas por hogar |
+|---|---|---|
+| Poder adquisitivo **por hogar** | +0,47 | +0,67 |
+| Poder adquisitivo **por habitante** | −0,03 | −0,11 |
+
+En el campo los **hogares son más grandes** (más personas aportando renta), así que el valor por hogar sube aunque cada
+persona no sea más rica. La variable por hogar mide en buena parte **el tamaño del hogar**. **Decisión: el modelo usa
+el poder adquisitivo por habitante.** Ambas tienen los mismos nulos y una correlación de 0,96 entre sí, por eso
+parecían intercambiables: el sesgo solo aparece al mirarlas junto a una **tercera** variable.
+
+#### Relaciones entre la zona y los clientes
+
+Agrupamos a los clientes por **distrito** (Austria) o **municipio** (Suiza) y calculamos la correlación.
+
+> **¿Qué es la correlación parcial?** La correlación que queda después de **descontar** otras variables. Si en las
+> zonas con más accidentes hay coches más nuevos, ¿es por los accidentes o porque esas zonas son rurales? La parcial
+> quita el efecto de lo rural y del poder adquisitivo, y mira lo que queda.
+
+> **Cuidado con el azar:** probamos unas 200 combinaciones. Con tantas pruebas, alguna puede salir "significativa" por
+> casualidad. Solo comentamos las **moderadas** (|ρ| ≥ 0,2), que **sobreviven al control** y que **tienen sentido**.
+
+| Hallazgo (Austria, 115 distritos) | Qué significa |
+|---|---|
+| **La telemetría confirma los accidentes:** donde hay más accidentes graves, nuestros clientes conducen más rápido (de ~43 a ~55 km/h de media) | Es la mecánica conocida (carreteras secundarias rápidas: menos accidentes, pero más graves). Que un dato **nuestro** cuadre con uno **oficial** demuestra que la unión por código postal funciona |
+| **¿Coches viejos donde hay más accidentes? Al revés:** coches **más nuevos**, más leasing y más vehículos que el cliente ya no tiene | Son zonas rurales y de paso donde el coche se usa mucho y se renueva antes. Más accidentes ↔ más coches que salen de la relación: idea de un **programa "después del siniestro"** |
+| **Donde la gente muere antes, el coche se cuida menos:** coches más viejos y más clientes que nunca van al taller oficial, también con coches de la misma edad (unos 4-5 puntos más) | Hipótesis: la misma **cultura de prevención** que cuida la salud cuida el coche. El mensaje de taller funciona mejor como **seguridad** |
+| **Lejos del hospital:** menos clientes inactivos, más furgonetas, gama más baja, trayectos más largos | El cliente rural depende del coche y es **más fiel**, pero compra **utilidad**, no prestigio |
+
+**Suiza:** solo pasan el filtro relaciones débiles (|ρ| ≤ 0,23), en la misma dirección que Austria. La unidad es el
+municipio (muy pequeño y ruidoso) y no hay mortalidad por zona. **No forzamos conclusiones donde no las hay.**
+
+> **Ojo:** son relaciones **entre zonas**, no entre personas. Que en un distrito haya más mortalidad y menos visitas al
+> taller no significa que cada cliente de ese distrito sea así (a esto se le llama **falacia ecológica**).
+
+Los indicadores de zona **no entran en el modelo** (se explica en el Reto 2), pero se usan para entender los datos y
+para **perfilar** los segmentos en el Reto 4.
+
+---
+
+## 7. Resumen de decisiones
 
 | Problema | Decisión |
 |---|---|
@@ -333,3 +415,6 @@ adquisitivo por hogar.
 | Medianas/modas que son tramos; topes del sistema | Excluir medianas/modas; describir con medianas |
 | Visitas al taller distintas por país | Relativas al país (Reto 2) |
 | Identificadores y variables redundantes | Excluidos |
+| Poder adquisitivo por hogar inflado en zonas rurales | Usar el **por habitante** |
+| Códigos postales que no existen (`0000`, `9999`…) | Sin dato de zona; no se inventa |
+| Relaciones no evidentes | Se comprueban siempre frente a su explicación aburrida (edad del coche, país, ruralidad, riqueza) |
