@@ -47,7 +47,7 @@ ELECTRIFICADO_POR_NOMBRE = r"^EQ|\d\s?e(?:\s|$)|\sde(?:\s|$)|electric"
 CAT_ORDINALES = ["age_range", "finance_leasing_status"]
 NUM_LOG = ["n_vehiculos_historico", "n_vehiculos_actuales"]
 NUM = ["meses_cliente", "antiguedad_vehiculo", "gama_max", "pct_electrificado",
-       "pct_furgoneta", "n_canales_consentidos", "tiene_telemetria", "poder_adquisitivo_pct_pais",
+       "pct_furgoneta", "n_canales_consentidos", "poder_adquisitivo_pct_pais",
        "visitas_taller_pct_pais"]
 FEATURES = CAT_ORDINALES + NUM_LOG + NUM
 
@@ -178,7 +178,9 @@ def construir_pipeline():
 # Modelo final elegido en el Reto 3 (reutilizado en el Reto 4 para obtener los mismos clusters)
 K_FINAL = 6
 SEMILLA = 42
+N_INIT_FINAL = 50
 
 
 def ajustar_kmeans(X, k=K_FINAL):
-    return KMeans(n_clusters=k, n_init=10, random_state=SEMILLA).fit(X)
+    # n_init=50: con 10 inicializaciones K-Means a veces converge a un óptimo local peor (ver Reto 3)
+    return KMeans(n_clusters=k, n_init=N_INIT_FINAL, random_state=SEMILLA).fit(X)
