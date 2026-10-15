@@ -226,7 +226,8 @@ inicializaciones y k de 2 a 5:
 ### Qué datos son y de dónde salen
 
 En el notebook **Extra_SaludSeguridadVial** descargamos datos **oficiales** de Austria y Suiza y los resumimos en una
-tabla por código postal (`datos_externos_por_cp.csv`). Con el código postal de cada cliente, cada uno recibe cuatro
+tabla por código postal (`datos_externos_por_cp.csv`). Las fuentes exactas (organismo, enlace, periodo y condiciones de
+uso) están en [`Fuentes_Datos_Externos.md`](Fuentes_Datos_Externos.md). Con el código postal de cada cliente, cada uno recibe cuatro
 datos de **la zona donde vive**:
 
 | Indicador | Qué mide | Austria | Suiza |
@@ -366,7 +367,28 @@ primera visita al taller**" en el CRM permitiría actuar **antes** de que el cli
 
 ---
 
-## 9. Resumen de decisiones
+## 9. Salud y ergonomía por segmento
+
+Con las probabilidades esperadas de salud del Reto 1 (Eurostat, por país, edad y sexo), la posición de conducción de sus
+coches y la duración de sus trayectos, se ve qué necesidad ergonómica tiene cada segmento y si su coche la cubre.
+Fuentes: [`Fuentes_Datos_Externos.md`](Fuentes_Datos_Externos.md).
+
+| Segmento | Limitación esperada | Coches altos | Lo que significa |
+|---|---|---|---|
+| **Recién Llegado de Ocasión** | ~30 % | **~37 %** | **La mayor brecha**: ~8.200 clientes con limitación esperada sin coche alto y ~4.700 de 65+ sin coche alto. Oferta: seminuevo Certified de posición alta (GLA, GLB, Clase B) |
+| **Fiel de Taller** | ~32 % | ~50 % | Segunda brecha (~6.700 y ~3.300). Su coche está en edad de renovación: GLB o GLC con KEYLESS-GO y portón eléctrico, probado en su propio taller |
+| **Pionero Eléctrico** | **~34 %** | ~73 % | La mayor necesidad (clientes de más edad), pero ya van sentados alto. Su ergonomía está en el interior: asientos multicontorno, cámara de 360° |
+| **Contacto Solo Digital** | ~34 % | ~53 % | Necesidad alta y la mitad sin coche alto; solo se le llega por email |
+| **Gran Formato** | ~31 % | ~100 % | Ya va alto, pero hace **los trayectos más largos** (~1 de cada 5 con trayectos medios de 30+ min): ergonomía de trabajo (asientos de confort con apoyo lumbar) |
+| **Premium Multivehículo** | ~31 % | ~61 % | Necesidad más baja, trayectos más largos que la media: argumento de confort (masaje, ENERGIZING, AIRMATIC) |
+
+**Idea transversal:** unos **21.000 clientes** con limitación esperada conducen un coche que no es alto. Es un argumento
+de renovación distinto del precio o la tecnología: el **bienestar al volante**. Siempre en clave de comodidad, nunca de
+salud ni de edad.
+
+---
+
+## 10. Resumen de decisiones
 
 | Decisión | Por qué |
 |---|---|
@@ -384,10 +406,11 @@ primera visita al taller**" en el CRM permitiría actuar **antes** de que el cli
 | Datos de zona como capa de perfilado, no como variables del K-Means | No cambian los segmentos con su peso natural; forzados, los vuelven geográficos |
 | Cruzar los segmentos con las relaciones no evidentes del Reto 1 | Aparecen públicos que la etiqueta del segmento no cuenta |
 | Validar la señal de riesgo temprano por tipo de vehículo | Descartar que los eléctricos "no vayan al taller" solo porque no lo necesitan |
+| Salud como probabilidad esperada por edad y sexo | Estimar necesidades ergonómicas sin tratar datos de salud de nadie |
 
 ---
 
-## 10. Glosario rápido
+## 11. Glosario rápido
 
 | Término | Significado |
 |---|---|

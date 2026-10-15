@@ -156,6 +156,15 @@ estandarizada (solo Austria) y distancia al hospital. También su percentil dent
 
 Se usan para **entender** los datos (Reto 1) y **describir** los segmentos (Reto 4).
 
+**Salud y ergonomía.** El mismo paso añade, para cada cliente, la **probabilidad esperada** de cinco problemas de salud
+según su país, edad y sexo (Eurostat), el **% de sus coches de posición alta** (SUV, monovolumen, furgoneta) y la
+**duración media de sus trayectos** (telemetría). Tampoco entran en el modelo: las probabilidades dependen solo de la
+edad y el sexo (la edad ya está en el modelo y el sexo inferido se dejó fuera a propósito), y la telemetría tiene huecos
+estructurales.
+
+Las fuentes de todos los datos externos, con enlaces y condiciones de uso, están en
+[`Fuentes_Datos_Externos.md`](Fuentes_Datos_Externos.md).
+
 ---
 
 ## 5. La preparación: el *pipeline*

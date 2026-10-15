@@ -354,6 +354,10 @@ En el notebook **Extra_SaludSeguridadVial** descargamos datos oficiales de Austr
 graves, mortalidad y distancia al hospital) y los resumimos por código postal. Cada cliente recibe los datos **de la
 zona donde vive**.
 
+**Fuentes:** Statistik Austria, Ministerio de Sanidad de Austria, ASTRA, swisstopo y BAG. El organismo, el dataset, el
+periodo, el enlace y las condiciones de uso de cada una están en
+[`Fuentes_Datos_Externos.md`](Fuentes_Datos_Externos.md).
+
 **Calidad de la unión.** Los clientes sin dato de zona son sobre todo los que no tienen código postal. Además, ~900
 clientes tienen un código postal con formato correcto **que no existe** (`0000`, `9999`, `1234`, `1000` genérico):
 se quedan sin dato, en lugar de asignarles uno equivocado.
@@ -400,6 +404,72 @@ municipio (muy pequeño y ruidoso) y no hay mortalidad por zona. **No forzamos c
 Los indicadores de zona **no entran en el modelo** (se explica en el Reto 2), pero se usan para entender los datos y
 para **perfilar** los segmentos en el Reto 4.
 
+### 6.3 Salud y ergonomía
+
+Nuestro CSV **no tiene datos de salud** (y no debe tenerlos: en el RGPD son datos de categoría especial). Pero sí tiene
+la **edad** y el **sexo** de cada cliente, y Eurostat publica cuánta gente tiene cada problema de salud **por país, edad
+y sexo**. Uniendo las dos cosas, cada cliente recibe la **probabilidad esperada** de tener ese problema.
+
+| Indicador | Fuente | Países | Por qué importa en un coche |
+|---|---|---|---|
+| Limitación (moderada o grave) por salud | Eurostat, EU-SILC 2023 | Austria y Suiza | Entrar, salir, cargar, girarse |
+| Limitación grave | ídem | Austria y Suiza | Necesidad de adaptaciones |
+| Problema lumbar crónico | Eurostat, Encuesta Europea de Salud (EHIS) 2019 | Austria | Horas sentado, vibraciones |
+| Problema cervical crónico | ídem | Austria | Girar la cabeza para maniobrar |
+| Artrosis | ídem | Austria | Rodillas, caderas y manos |
+
+Suiza no participa en la EHIS, así que los tres últimos solo se calculan para Austria: **no inventamos** valores para
+Suiza. Todas las fuentes, con sus enlaces, están en [`Fuentes_Datos_Externos.md`](Fuentes_Datos_Externos.md).
+
+> **¿Qué es una probabilidad esperada?** Si el 41 % de las mujeres austriacas de 65+ declara un problema lumbar, a una
+> clienta austriaca de 65+ le asignamos 0,41. **No sabemos** si ella lo tiene. Pero si sumamos esas probabilidades en un
+> grupo, obtenemos **cuántos** clientes de ese grupo lo tienen probablemente. Sirve para decidir qué ofrecer, nunca para
+> etiquetar a una persona.
+
+**Cuántos:** se esperan unos **55.000 clientes con alguna limitación por salud** (casi 1 de cada 3) y, solo en Austria,
+unos 16.000 con problema lumbar, 11.000 cervical y 8.000 con artrosis.
+
+#### La brecha ergonómica
+
+Un coche de **posición alta** (SUV, monovolumen, furgoneta) se entra y se sale sin agacharse. Si la necesidad mandase,
+los clientes mayores tendrían cada vez más coches altos. Pero:
+
+| Edad | Limitación por salud esperada | Coches de posición alta |
+|---|---|---|
+| 35-44 | ~22 % | ~58 % |
+| 45-54 | ~29 % | ~62 % |
+| 55-64 | ~40 % | ~64 % |
+| 65+ | **~48 %** | **~63 %** |
+
+La necesidad **se duplica**, pero la proporción de coches altos **se estanca**. Hay ~12.400 clientes de 65+ sin ningún
+coche alto, y unos 5.900 de ellos probablemente tienen una limitación. Es un público para un **SUV compacto o
+monovolumen** (GLA, GLB, Clase B, EQA/EQB) con un argumento de **comodidad**, no de edad.
+
+#### Tiempo al volante
+
+Con la telemetría se estima la duración media de un trayecto (distancia media ÷ velocidad media). Estar mucho tiempo
+sentado y con vibraciones es un factor de riesgo de dolor lumbar conocido en salud laboral.
+
+- El trayecto típico dura **~18 minutos**.
+- Los **conductores de furgoneta** hacen los trayectos más largos: para ellos el asiento es una herramienta de trabajo.
+- Los de 65+ hacen los más **cortos**: su ergonomía es la de entrar, salir y maniobrar.
+
+**Detalle de calidad:** ~1.800 relaciones tienen una velocidad media de menos de 5 km/h, que daría trayectos de días. Se
+descartan, igual que las duraciones medias de más de 4 horas.
+
+#### De cada problema de salud a un equipamiento Mercedes-Benz
+
+| Problema | Qué le cuesta al conductor | Equipamiento que lo alivia |
+|---|---|---|
+| Limitación general | Entrar, salir, cargar | Posición alta (GLA, GLB, Clase B, EQA/EQB), KEYLESS-GO, portón eléctrico EASY-PACK, Clase V con puertas correderas |
+| Lumbar | Trayectos largos, vibraciones | Asientos multicontorno con masaje, apoyo lumbar, ENERGIZING, suspensión AIRMATIC |
+| Cervical | Girar la cabeza al maniobrar | Cámara de 360°, asistente de ángulo muerto, Active Parking Assist, Head-up Display |
+| Artrosis | Agacharse, fuerza en las manos, frío | Posición alta, KEYLESS-GO, cierre de confort de puertas, volante y asientos calefactables |
+| Limitación grave | Conducir un coche de serie | Adaptaciones con transformadores homologados; Clase V adaptada |
+
+**Uso responsable:** el mensaje es siempre de **comodidad** ("entra y sal sin esfuerzo", "llega descansado"), nunca de
+salud ni de edad.
+
 ---
 
 ## 7. Resumen de decisiones
@@ -418,3 +488,6 @@ para **perfilar** los segmentos en el Reto 4.
 | Poder adquisitivo por hogar inflado en zonas rurales | Usar el **por habitante** |
 | Códigos postales que no existen (`0000`, `9999`…) | Sin dato de zona; no se inventa |
 | Relaciones no evidentes | Se comprueban siempre frente a su explicación aburrida (edad del coche, país, ruralidad, riqueza) |
+| Salud sin datos de salud | Probabilidad esperada por país, edad y sexo (Eurostat); nunca un dato de la persona |
+| Problemas lumbares, cervicales y artrosis solo en Austria | Suiza no participa en la EHIS: no se inventan valores |
+| Trayectos con velocidad media < 5 km/h | Descartados (darían duraciones de días) |

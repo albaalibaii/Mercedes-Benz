@@ -42,8 +42,10 @@ Mercedes?** Y, si es así, **¿qué acciones de producto o servicio tiene sentid
 | **Hospitales** | Listado oficial del Ministerio de Sanidad | Indicadores de hospitales 2023 (BAG, oficina federal de salud) |
 | **Código postal → zona** | Lista oficial de municipios con sus códigos postales | Directorio oficial de localidades (swisstopo) |
 
-Todas son **fuentes oficiales de libre uso**. Statistik Austria usa la licencia CC BY 4.0 (hay que citar la fuente); las
-fuentes suizas siguen las condiciones de opendata.swiss. El notebook las descarga solo si no existen; los ficheros brutos
+Todas son **fuentes oficiales**. Statistik Austria usa la licencia CC BY 4.0 (hay que citar la fuente); las fuentes
+suizas siguen las condiciones de opendata.swiss (uso libre citando la fuente); el directorio de hospitales del
+Ministerio de Sanidad de Austria es una descarga pública sin licencia explícita. El enlace exacto, el periodo y las
+condiciones de cada fichero están en [`Fuentes_Datos_Externos.md`](Fuentes_Datos_Externos.md). El notebook las descarga solo si no existen; los ficheros brutos
 no se suben a git, pero sí la **tabla final por código postal** (`datos_externos_por_cp.csv`), para que el equipo pueda
 usarla sin descargar nada.
 

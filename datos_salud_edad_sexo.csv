@@ -1,0 +1,127 @@
+indicador,country_code,age_range,gender_derived,prevalencia,fuente,descripcion
+p_limitacion,AT,<25,male,0.136,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,CH,<25,male,0.209,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,AT,<25,female,0.138,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,CH,<25,female,0.258,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,AT,<25,unknown,0.13699999999999998,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,CH,<25,unknown,0.23399999999999999,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,AT,25-34,male,0.115,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,CH,25-34,male,0.201,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,AT,25-34,female,0.168,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,CH,25-34,female,0.27899999999999997,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,AT,25-34,unknown,0.141,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,CH,25-34,unknown,0.239,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,AT,35-44,male,0.151,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,CH,35-44,male,0.213,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,AT,35-44,female,0.22699999999999998,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,CH,35-44,female,0.299,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,AT,35-44,unknown,0.18899999999999997,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,CH,35-44,unknown,0.259,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,AT,45-54,male,0.243,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,CH,45-54,male,0.294,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,AT,45-54,female,0.3,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,CH,45-54,female,0.344,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,AT,45-54,unknown,0.272,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,CH,45-54,unknown,0.319,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,AT,55-64,male,0.436,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,CH,55-64,male,0.379,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,AT,55-64,female,0.354,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,CH,55-64,female,0.42,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,AT,55-64,unknown,0.395,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,CH,55-64,unknown,0.39799999999999996,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,AT,65+,male,0.47200000000000003,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,CH,65+,male,0.446,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,AT,65+,female,0.539,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,CH,65+,female,0.534,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,AT,65+,unknown,0.509,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion,CH,65+,unknown,0.493,Eurostat hlth_silc_06 (2023),Limitación (moderada o grave) en las actividades habituales por un problema de salud
+p_limitacion_grave,AT,<25,male,0.044000000000000004,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,CH,<25,male,0.032,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,AT,<25,female,0.021,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,CH,<25,female,0.027000000000000003,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,AT,<25,unknown,0.033,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,CH,<25,unknown,0.03,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,AT,25-34,male,0.02,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,CH,25-34,male,0.03,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,AT,25-34,female,0.031,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,CH,25-34,female,0.036000000000000004,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,AT,25-34,unknown,0.025,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,CH,25-34,unknown,0.033,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,AT,35-44,male,0.040999999999999995,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,CH,35-44,male,0.040999999999999995,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,AT,35-44,female,0.036000000000000004,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,CH,35-44,female,0.061,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,AT,35-44,unknown,0.039,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,CH,35-44,unknown,0.051,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,AT,45-54,male,0.079,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,CH,45-54,male,0.04,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,AT,45-54,female,0.07200000000000001,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,CH,45-54,female,0.065,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,AT,45-54,unknown,0.075,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,CH,45-54,unknown,0.052000000000000005,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,AT,55-64,male,0.146,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,CH,55-64,male,0.094,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,AT,55-64,female,0.1,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,CH,55-64,female,0.07400000000000001,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,AT,55-64,unknown,0.12300000000000001,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,CH,55-64,unknown,0.085,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,AT,65+,male,0.158,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,CH,65+,male,0.067,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,AT,65+,female,0.2,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,CH,65+,female,0.095,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,AT,65+,unknown,0.18100000000000002,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_limitacion_grave,CH,65+,unknown,0.08199999999999999,Eurostat hlth_silc_06 (2023),Limitación grave en las actividades habituales por un problema de salud
+p_lumbar,AT,<25,male,0.08900000000000001,Eurostat hlth_ehis_cd1e (2019),Problema lumbar crónico (12 meses)
+p_lumbar,AT,<25,female,0.08900000000000001,Eurostat hlth_ehis_cd1e (2019),Problema lumbar crónico (12 meses)
+p_lumbar,AT,<25,unknown,0.08900000000000001,Eurostat hlth_ehis_cd1e (2019),Problema lumbar crónico (12 meses)
+p_lumbar,AT,25-34,male,0.114,Eurostat hlth_ehis_cd1e (2019),Problema lumbar crónico (12 meses)
+p_lumbar,AT,25-34,female,0.136,Eurostat hlth_ehis_cd1e (2019),Problema lumbar crónico (12 meses)
+p_lumbar,AT,25-34,unknown,0.125,Eurostat hlth_ehis_cd1e (2019),Problema lumbar crónico (12 meses)
+p_lumbar,AT,35-44,male,0.18,Eurostat hlth_ehis_cd1e (2019),Problema lumbar crónico (12 meses)
+p_lumbar,AT,35-44,female,0.213,Eurostat hlth_ehis_cd1e (2019),Problema lumbar crónico (12 meses)
+p_lumbar,AT,35-44,unknown,0.196,Eurostat hlth_ehis_cd1e (2019),Problema lumbar crónico (12 meses)
+p_lumbar,AT,45-54,male,0.311,Eurostat hlth_ehis_cd1e (2019),Problema lumbar crónico (12 meses)
+p_lumbar,AT,45-54,female,0.293,Eurostat hlth_ehis_cd1e (2019),Problema lumbar crónico (12 meses)
+p_lumbar,AT,45-54,unknown,0.302,Eurostat hlth_ehis_cd1e (2019),Problema lumbar crónico (12 meses)
+p_lumbar,AT,55-64,male,0.35,Eurostat hlth_ehis_cd1e (2019),Problema lumbar crónico (12 meses)
+p_lumbar,AT,55-64,female,0.359,Eurostat hlth_ehis_cd1e (2019),Problema lumbar crónico (12 meses)
+p_lumbar,AT,55-64,unknown,0.355,Eurostat hlth_ehis_cd1e (2019),Problema lumbar crónico (12 meses)
+p_lumbar,AT,65+,male,0.358,Eurostat hlth_ehis_cd1e (2019),Problema lumbar crónico (12 meses)
+p_lumbar,AT,65+,female,0.414,Eurostat hlth_ehis_cd1e (2019),Problema lumbar crónico (12 meses)
+p_lumbar,AT,65+,unknown,0.389,Eurostat hlth_ehis_cd1e (2019),Problema lumbar crónico (12 meses)
+p_cervical,AT,<25,male,0.047,Eurostat hlth_ehis_cd1e (2019),Problema cervical crónico (12 meses)
+p_cervical,AT,<25,female,0.079,Eurostat hlth_ehis_cd1e (2019),Problema cervical crónico (12 meses)
+p_cervical,AT,<25,unknown,0.062,Eurostat hlth_ehis_cd1e (2019),Problema cervical crónico (12 meses)
+p_cervical,AT,25-34,male,0.052000000000000005,Eurostat hlth_ehis_cd1e (2019),Problema cervical crónico (12 meses)
+p_cervical,AT,25-34,female,0.129,Eurostat hlth_ehis_cd1e (2019),Problema cervical crónico (12 meses)
+p_cervical,AT,25-34,unknown,0.09,Eurostat hlth_ehis_cd1e (2019),Problema cervical crónico (12 meses)
+p_cervical,AT,35-44,male,0.102,Eurostat hlth_ehis_cd1e (2019),Problema cervical crónico (12 meses)
+p_cervical,AT,35-44,female,0.21100000000000002,Eurostat hlth_ehis_cd1e (2019),Problema cervical crónico (12 meses)
+p_cervical,AT,35-44,unknown,0.156,Eurostat hlth_ehis_cd1e (2019),Problema cervical crónico (12 meses)
+p_cervical,AT,45-54,male,0.187,Eurostat hlth_ehis_cd1e (2019),Problema cervical crónico (12 meses)
+p_cervical,AT,45-54,female,0.335,Eurostat hlth_ehis_cd1e (2019),Problema cervical crónico (12 meses)
+p_cervical,AT,45-54,unknown,0.261,Eurostat hlth_ehis_cd1e (2019),Problema cervical crónico (12 meses)
+p_cervical,AT,55-64,male,0.21100000000000002,Eurostat hlth_ehis_cd1e (2019),Problema cervical crónico (12 meses)
+p_cervical,AT,55-64,female,0.311,Eurostat hlth_ehis_cd1e (2019),Problema cervical crónico (12 meses)
+p_cervical,AT,55-64,unknown,0.262,Eurostat hlth_ehis_cd1e (2019),Problema cervical crónico (12 meses)
+p_cervical,AT,65+,male,0.203,Eurostat hlth_ehis_cd1e (2019),Problema cervical crónico (12 meses)
+p_cervical,AT,65+,female,0.32,Eurostat hlth_ehis_cd1e (2019),Problema cervical crónico (12 meses)
+p_cervical,AT,65+,unknown,0.268,Eurostat hlth_ehis_cd1e (2019),Problema cervical crónico (12 meses)
+p_artrosis,AT,<25,male,0.0,Eurostat hlth_ehis_cd1e (2019),Artrosis (12 meses)
+p_artrosis,AT,<25,female,0.004,Eurostat hlth_ehis_cd1e (2019),Artrosis (12 meses)
+p_artrosis,AT,<25,unknown,0.002,Eurostat hlth_ehis_cd1e (2019),Artrosis (12 meses)
+p_artrosis,AT,25-34,male,0.006999999999999999,Eurostat hlth_ehis_cd1e (2019),Artrosis (12 meses)
+p_artrosis,AT,25-34,female,0.013000000000000001,Eurostat hlth_ehis_cd1e (2019),Artrosis (12 meses)
+p_artrosis,AT,25-34,unknown,0.01,Eurostat hlth_ehis_cd1e (2019),Artrosis (12 meses)
+p_artrosis,AT,35-44,male,0.035,Eurostat hlth_ehis_cd1e (2019),Artrosis (12 meses)
+p_artrosis,AT,35-44,female,0.048,Eurostat hlth_ehis_cd1e (2019),Artrosis (12 meses)
+p_artrosis,AT,35-44,unknown,0.040999999999999995,Eurostat hlth_ehis_cd1e (2019),Artrosis (12 meses)
+p_artrosis,AT,45-54,male,0.10300000000000001,Eurostat hlth_ehis_cd1e (2019),Artrosis (12 meses)
+p_artrosis,AT,45-54,female,0.149,Eurostat hlth_ehis_cd1e (2019),Artrosis (12 meses)
+p_artrosis,AT,45-54,unknown,0.127,Eurostat hlth_ehis_cd1e (2019),Artrosis (12 meses)
+p_artrosis,AT,55-64,male,0.188,Eurostat hlth_ehis_cd1e (2019),Artrosis (12 meses)
+p_artrosis,AT,55-64,female,0.248,Eurostat hlth_ehis_cd1e (2019),Artrosis (12 meses)
+p_artrosis,AT,55-64,unknown,0.21899999999999997,Eurostat hlth_ehis_cd1e (2019),Artrosis (12 meses)
+p_artrosis,AT,65+,male,0.25,Eurostat hlth_ehis_cd1e (2019),Artrosis (12 meses)
+p_artrosis,AT,65+,female,0.41600000000000004,Eurostat hlth_ehis_cd1e (2019),Artrosis (12 meses)
+p_artrosis,AT,65+,unknown,0.342,Eurostat hlth_ehis_cd1e (2019),Artrosis (12 meses)

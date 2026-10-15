@@ -63,9 +63,43 @@ COLS_TELEMETRIA = ["trip_distance_average", "trip_distance_median", "operating_h
 RUTA_ZONA = "datos_externos_por_cp.csv"
 COLS_ZONA = ["tasa_accidentes", "pct_graves", "mortalidad_std", "dist_hospital_km"]
 
+# Prevalencias oficiales de salud por país, edad y sexo (Eurostat). Solo perfilado: es la probabilidad ESPERADA para
+# alguien de su edad y sexo, no un dato de salud del cliente
+RUTA_SALUD = "datos_salud_edad_sexo.csv"
+EUROSTAT_API = "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/"
+INDICADORES_SALUD = {
+    # columna: (dataset, filtro del indicador, año, países, etiqueta)
+    "p_limitacion": ("hlth_silc_06", {"lev_limit": "SM_SEV", "wstatus": "POP"}, 2023, ["AT", "CH"],
+                     "Limitación (moderada o grave) en las actividades habituales por un problema de salud"),
+    "p_limitacion_grave": ("hlth_silc_06", {"lev_limit": "SEV", "wstatus": "POP"}, 2023, ["AT", "CH"],
+                           "Limitación grave en las actividades habituales por un problema de salud"),
+    "p_lumbar": ("hlth_ehis_cd1e", {"hlth_pb": "LW_CHR_BACK", "isced11": "TOTAL"}, 2019, ["AT"],
+                 "Problema lumbar crónico (12 meses)"),
+    "p_cervical": ("hlth_ehis_cd1e", {"hlth_pb": "NECK", "isced11": "TOTAL"}, 2019, ["AT"],
+                   "Problema cervical crónico (12 meses)"),
+    "p_artrosis": ("hlth_ehis_cd1e", {"hlth_pb": "ARTHRO", "isced11": "TOTAL"}, 2019, ["AT"], "Artrosis (12 meses)"),
+}
+COLS_SALUD = list(INDICADORES_SALUD)
+# Tramos de edad del CSV → tramos de Eurostat (EU-SILC empieza a los 16 años; EHIS, a los 15)
+EDAD_EUROSTAT = {"hlth_silc_06": {"<25": "Y16-24", "25-34": "Y25-34", "35-44": "Y35-44", "45-54": "Y45-54",
+                                  "55-64": "Y55-64", "65+": "Y_GE65"},
+                 "hlth_ehis_cd1e": {"<25": "Y15-24", "25-34": "Y25-34", "35-44": "Y35-44", "45-54": "Y45-54",
+                                    "55-64": "Y55-64", "65+": "Y_GE65"}}
+SEXO_EUROSTAT = {"male": "M", "female": "F", "unknown": "T"}   # género desconocido → total de ambos sexos
+
+# Vehículos de posición de conducción alta (SUV, monovolumen, furgoneta): se entra y se sale sin agacharse
+POSICION_ALTA_CLASE = r"GL|EQA|EQB|EQC|G-Class|M-|B-Class|R-Class|V-Class|Viano|Sprinter|Citan|X-Class"
+POSICION_ALTA_NOMBRE = r"^(?:AMG\s+)?(?:GL[ABCES]|G\s|EQ[ABCV]|V\s|Vito|Sprinter|Citan|B\s)|SUV"
+
 
 def cargar_datos(ruta=RUTA_DATOS):
     return pd.read_csv(ruta, low_memory=False)
+
+
+def _posicion_alta(df):
+    por_clase = df["model_class"].str.contains(POSICION_ALTA_CLASE, regex=True, na=False)
+    por_nombre = df["vehicle_type"].str.contains(POSICION_ALTA_NOMBRE, regex=True, na=False)
+    return (por_clase | por_nombre).astype(float)
 
 
 def _gama(df):
@@ -96,6 +130,11 @@ def agregar_clientes(df):
         "electrificado": _electrificado(df).astype(float),
         "furgoneta": (df["product_group"] == "T").astype(float),
         "amg": df["vehicle_type"].str.startswith("AMG", na=False).astype(float),
+        "posicion_alta": _posicion_alta(df),
+        # Duración media de un trayecto (min) = distancia media / velocidad media (telemetría de la relación).
+        # Velocidades < 5 km/h dan duraciones absurdas (días): se descartan, igual que trayectos medios > 4 h
+        "minutos_trayecto": (df["trip_distance_average"] / df["speed_average"].where(df["speed_average"] >= 5) * 60)
+                            .where(lambda m: m <= 240),
         "b2b": (df["role_type"] == "B2B").astype(float),
         "visitas": df["workshop_visits_warranty_goodwill"],
         "telemetria": df[COLS_TELEMETRIA].notna().any(axis=1).astype(float),
@@ -103,6 +142,7 @@ def agregar_clientes(df):
     })
     # Antigüedad del vehículo "de referencia": el actual más reciente; si no tiene actual, el más reciente
     v["antig_actual"] = v["antiguedad"].where(v["actual"])
+    v["posicion_alta_actual"] = v["posicion_alta"].where(v["actual"])
     g = v.groupby("client_id", sort=False)
     veh = pd.DataFrame({
         "n_vehiculos_historico": g.size(),
@@ -113,6 +153,9 @@ def agregar_clientes(df):
         "visitas_taller_por_vehiculo": g["visitas"].mean(),
         "tiene_telemetria": g["telemetria"].max(),
         "pct_amg": g["amg"].mean(),
+        # % de sus coches actuales con posición alta (si no tiene ninguno actual, de todos sus coches)
+        "pct_posicion_alta": g["posicion_alta_actual"].mean().fillna(g["posicion_alta"].mean()),
+        "minutos_trayecto": g["minutos_trayecto"].median(),
         "es_b2b": g["b2b"].max(),
         **{c: g[c].median() for c in COLS_TELEMETRIA},
     })
@@ -146,7 +189,7 @@ def agregar_clientes(df):
     # distinta (52 % vs 23 % de clientes con 0 visitas con coches de la misma antigüedad)
     out["visitas_taller_pct_pais"] = out.groupby("country_code")["visitas_taller_por_vehiculo"].rank(pct=True)
     out.index.name = "client_id"
-    return anadir_datos_zona(out)
+    return anadir_salud_edad_sexo(anadir_datos_zona(out))
 
 
 def anadir_datos_zona(clientes, ruta=RUTA_ZONA):
@@ -233,3 +276,63 @@ def nombrar_segmentos(centroides):
     nombres[resto["visitas_taller_pct_pais"].idxmin()] = "Recién Llegado de Ocasión"
     assert len(set(nombres.values())) == 6, "la regla de nombres no es única"
     return nombres
+
+
+def _descargar_json(url):
+    """Descarga un JSON. Si Python no puede verificar el certificado (pasa en algunos Windows), usa curl."""
+    import json
+    import subprocess
+    from urllib.error import URLError
+    from urllib.request import Request, urlopen
+    try:
+        return json.load(urlopen(Request(url, headers={"User-Agent": "Mozilla/5.0"}), timeout=120))
+    except URLError:
+        salida = subprocess.run(["curl", "-sSL", "--fail", url], capture_output=True, check=True)
+        return json.loads(salida.stdout)
+
+
+def _eurostat(dataset, filtros):
+    """Descarga un dataset de la API de Eurostat (formato JSON-stat) y lo devuelve en formato largo."""
+    import itertools
+    from urllib.parse import urlencode
+    url = EUROSTAT_API + dataset + "?" + urlencode([("format", "JSON"), ("lang", "EN")] +
+                                                    [(k, x) for k, v in filtros.items() for x in (v if isinstance(v, list) else [v])])
+    j = _descargar_json(url)
+    dims = j["id"]
+    cats = [sorted(j["dimension"][d]["category"]["index"].items(), key=lambda x: x[1]) for d in dims]
+    filas = [{**{d: c[0] for d, c in zip(dims, combo)}, "valor": j["value"].get(str(pos))}
+             for pos, combo in enumerate(itertools.product(*cats))]
+    return pd.DataFrame(filas).dropna(subset=["valor"])
+
+
+def construir_tabla_salud(ruta=RUTA_SALUD):
+    """Descarga de Eurostat las prevalencias de INDICADORES_SALUD por país, tramo de edad y sexo y las guarda."""
+    filas = []
+    for col, (dataset, filtro, anio, paises, etiqueta) in INDICADORES_SALUD.items():
+        edades = EDAD_EUROSTAT[dataset]
+        t = _eurostat(dataset, {**filtro, "geo": paises, "unit": "PC", "time": str(anio),
+                                "sex": list(SEXO_EUROSTAT.values()), "age": list(edades.values())})
+        for tramo, cod_edad in edades.items():
+            for genero, cod_sexo in SEXO_EUROSTAT.items():
+                for pais in paises:
+                    v = t.loc[(t["geo"] == pais) & (t["age"] == cod_edad) & (t["sex"] == cod_sexo), "valor"]
+                    filas.append({"indicador": col, "country_code": pais, "age_range": tramo, "gender_derived": genero,
+                                  "prevalencia": v.iloc[0] / 100 if len(v) else np.nan, "fuente": f"Eurostat {dataset} ({anio})",
+                                  "descripcion": etiqueta})
+    tabla = pd.DataFrame(filas)
+    tabla.to_csv(ruta, index=False)
+    return tabla
+
+
+def anadir_salud_edad_sexo(clientes, ruta=RUTA_SALUD):
+    """Añade a cada cliente la prevalencia esperada de cada indicador de salud para su país, edad y sexo."""
+    try:
+        tabla = pd.read_csv(ruta)
+    except FileNotFoundError:
+        tabla = pd.DataFrame(columns=["indicador", "country_code", "age_range", "gender_derived", "prevalencia"])
+    ancha = tabla.pivot_table(index=["country_code", "age_range", "gender_derived"], columns="indicador",
+                              values="prevalencia").reindex(columns=COLS_SALUD).reset_index()
+    unido = clientes.reset_index().merge(ancha, on=["country_code", "age_range", "gender_derived"], how="left",
+                                         validate="many_to_one").set_index("client_id")
+    assert len(unido) == len(clientes)
+    return unido.loc[clientes.index]
