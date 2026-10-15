@@ -221,7 +221,105 @@ inicializaciones y k de 2 a 5:
 
 ---
 
-## 6. Resumen de decisiones
+## 6. Salud y seguridad vial por segmento (datos de internet)
+
+### Qué datos son y de dónde salen
+
+En el notebook **Extra_SaludSeguridadVial** descargamos datos **oficiales** de Austria y Suiza y los resumimos en una
+tabla por código postal (`datos_externos_por_cp.csv`). Con el código postal de cada cliente, cada uno recibe cuatro
+datos de **la zona donde vive**:
+
+| Indicador | Qué mide | Austria | Suiza |
+|---|---|---|---|
+| Accidentes por 1.000 habitantes | Accidentes con heridos al año, sin autopistas | ✓ (distrito) | ✓ (municipio) |
+| % de accidentes graves | Accidentes con fallecidos o heridos graves | ✓ | ✓ |
+| Mortalidad estandarizada | Muertes por cada 1.000 habitantes, corregida por edad (para que un distrito con más mayores no salga peor solo por eso) | ✓ | ✗ (no se publica por zona) |
+| Distancia al hospital | Km en línea recta al hospital general de urgencias más cercano | ✓ | ✓ |
+
+### Tres cuidados importantes
+
+1. **Siempre dentro de cada país.** Suiza tiene la mitad de accidentes por habitante que Austria y hospitales más
+   cercanos. Si comparásemos segmentos sin separar países, un segmento con más suizos parecería "más seguro" solo por
+   ser suizo: el mismo error de agrupar por país que corregimos en el Reto 2.
+2. **Es un dato de la zona, no de la persona.** Todos los vecinos de un distrito tienen el mismo valor. No sabemos si
+   un cliente concreto ha tenido un accidente: sabemos cómo es la zona donde vive.
+3. **Los vecinos no son independientes.** Con 170.000 clientes, un test estadístico clásico daría "significativa"
+   cualquier diferencia diminuta, porque cuenta a cada vecino como una prueba nueva cuando en realidad comparten el
+   mismo dato. Por eso usamos un **bootstrap por zonas**: repetimos el cálculo 500 veces sorteando **distritos o
+   municipios enteros** y miramos entre qué valores se mueve el resultado (el **intervalo de confianza**). Si el
+   intervalo incluye el 100, la diferencia no se distingue de la media.
+
+### Cómo se lee el índice
+
+**Índice 100 = el cliente medio de su país.** Un 118 en distancia al hospital significa que los clientes de ese
+segmento viven, de media, un 18 % más lejos del hospital que el cliente típico de su país.
+
+### Qué sale
+
+| Segmento | Qué dice su zona |
+|---|---|
+| **Gran Formato** | El único que destaca de verdad: **18-20 % más lejos del hospital** en los dos países y, en Austria, **8 % más accidentes graves**. Es el perfil rural o de montaña |
+| **Recién Llegado de Ocasión** | El más **urbano**: más cerca del hospital y menos accidentes graves. En Austria tiene la mortalidad de zona más alta, pero la diferencia es mínima (8,97 frente a 8,91 ‰) |
+| **Pionero Eléctrico** | Algo más lejos del hospital en Austria (104) y algo más de accidentes graves (102): periferias con casa y cargador |
+| **Premium, Fiel de Taller, Contacto Solo Digital** | Prácticamente en la media |
+
+**Conclusión:** las diferencias entre segmentos son **pequeñas**. Tiene sentido: los segmentos se formaron por **qué
+conduce** el cliente y **cómo se relaciona** con la marca, no por dónde vive (en el apartado de trampas ya vimos que
+el poder adquisitivo de la zona tampoco los diferencia).
+
+### Entonces, ¿para qué sirve?
+
+Las diferencias están **dentro** de cada segmento, no entre segmentos. Dentro de Fiel de Taller, por ejemplo, unos
+10.600 clientes viven en zonas con muchos accidentes graves y otros 35.000 no. Por eso combinamos las dos cosas:
+
+- **El segmento dice QUÉ ofrecer** (renovación, mantenimiento, gama EQ...).
+- **La zona dice A QUIÉN de ese segmento** priorizar con un mensaje de seguridad.
+
+Ejemplo: de los 46.950 "Recién Llegado de Ocasión", **~7.500** viven en zona de muchos accidentes graves y tienen un
+coche anterior a julio de 2024. Ese mes entró en vigor el Reglamento General de Seguridad de la UE, que obliga a
+llevar asistentes como la frenada de emergencia, así que esos coches pueden no tenerlos. Para ellos: un seminuevo
+**Mercedes-Benz Certified** o un primer coche nuevo con **Active Brake Assist** de serie, y una **revisión de
+seguridad** gratuita en el taller oficial.
+
+Los cortes ("zona del 25 % con más accidentes graves", "10 % más lejos del hospital") se calculan **entre clientes y
+dentro de cada país**. Como los vecinos comparten valor, hay empates y el "25 %" queda en un ~22 %.
+
+**Uso responsable:** el dato de zona decide **dónde y qué** comunicar, **nunca** a quién excluir ni qué precio cobrar.
+Los mensajes son positivos y nunca mencionan la salud o los accidentes de la zona del cliente.
+
+---
+
+## 7. ¿Y si metemos esos datos dentro del K-Means?
+
+La otra opción era usar los indicadores de zona como **variables del modelo** y ver si salen segmentos nuevos.
+
+### Cómo lo hicimos
+
+- Añadimos **accidentes, % graves y distancia al hospital** como **percentil dentro de su país** (igual que el poder
+  adquisitivo y las visitas al taller del Reto 2) y los escalamos igual que el resto.
+- **La mortalidad queda fuera** porque solo existe en Austria. Si rellenásemos con la mediana al 66 % de clientes
+  suizos, crearíamos una variable que en realidad separa por país.
+- A los clientes sin dato de zona (~10 %) se les pone la mediana, como en el Reto 2.
+- Mismo K-Means del Reto 3: k = 6, 50 inicializaciones, semilla 42.
+
+### Qué pasó
+
+| Prueba | Resultado | Qué significa |
+|---|---|---|
+| Mismo peso que el resto de variables | **ARI 0,977**: salen los mismos 6 segmentos (el 99 % de cada uno cae en su equivalente) | El K-Means **ignora** las variables de zona porque no forman grupos |
+| Silhouette | Baja de **0,136 a 0,102** | Solo añaden ruido |
+| Zona con **peso doble** | **ARI 0,01**: segmentos totalmente distintos | La zona "se come" el modelo: clusters de "urbano" o "rural" y desaparecen furgonetas, eléctricos, leasing y taller, lo que era útil para vender. Además, el resultado lo decide quien elige el peso, no los datos |
+| Mismo peso con **k = 8** | **ARI 0,53** | Se mantienen los segmentos claros. Uno de los clusters nuevos separa el leasing. El otro es un grupo **urbano y de menor poder adquisitivo**, sacado a partes iguales de Fiel de Taller y Recién Llegado: separa por **dónde vive** el cliente, no por cómo se relaciona con la marca |
+
+### Decisión
+
+**Los datos de salud y seguridad vial no entran en el clustering.** Con su peso natural no cambian nada y empeoran el
+silhouette. Si se les fuerza, convierten segmentos de **cliente** en segmentos **geográficos**. Y son datos de zona,
+no de la persona. Su sitio es el del apartado 6: una **capa de perfilado** encima de los 6 segmentos.
+
+---
+
+## 8. Resumen de decisiones
 
 | Decisión | Por qué |
 |---|---|
@@ -234,10 +332,13 @@ inicializaciones y k de 2 a 5:
 | Tratar "Contacto Solo Digital" como segmento de canal | Su único rasgo es cómo se le puede contactar |
 | No usar el género para campañas | Es inferido y con mucho desconocido |
 | Sub-clustering de Premium con k = 3 | Era el segmento más heterogéneo; tres sub-perfiles estables y accionables |
+| Comparar la zona de cada segmento dentro de cada país | Austria y Suiza tienen niveles muy distintos de accidentes y distancias |
+| Bootstrap por zonas, no test clásico | Los vecinos comparten el dato de zona y no son observaciones independientes |
+| Datos de zona como capa de perfilado, no como variables del K-Means | No cambian los segmentos con su peso natural; forzados, los vuelven geográficos |
 
 ---
 
-## 7. Glosario rápido
+## 9. Glosario rápido
 
 | Término | Significado |
 |---|---|
@@ -248,3 +349,9 @@ inicializaciones y k de 2 a 5:
 | Hipótesis | Explicación probable que los datos sugieren pero no prueban |
 | Segmento de canal | Grupo definido por cómo se le puede contactar, no por su tipo de cliente |
 | Sub-clustering | Aplicar clustering dentro de un segmento para subdividirlo |
+| Dato de zona | Valor que comparten todos los que viven en el mismo distrito o municipio |
+| Mortalidad estandarizada | Tasa de mortalidad corregida por la edad de la población, para comparar zonas jóvenes y envejecidas |
+| Índice 100 | Forma de comparar: 100 es la media; 118 es un 18 % por encima |
+| Bootstrap por zonas | Repetir el cálculo sorteando zonas enteras para ver cuánto puede variar el resultado |
+| Intervalo de confianza | Rango en el que probablemente está el valor real; si incluye el 100, no se distingue de la media |
+| Capa de perfilado | Información que se añade encima de los segmentos para describirlos, sin cambiar cómo se formaron |
